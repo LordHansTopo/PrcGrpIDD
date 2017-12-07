@@ -1,2 +1,2 @@
 # PrcGrpIDD
-Práctica POO
+Práctica POO.
