@@ -1,4 +1,4 @@
-package SimuladorInversiones.General;
+package General;
 
 public class Main {
 
