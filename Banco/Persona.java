@@ -1,5 +1,4 @@
-package practica;
-
+package Banco;
 
 public class Persona {
     private String nombre;
@@ -20,7 +19,7 @@ public class Persona {
     }
 
     public void printNombre(){
-        System.out.println(getNombre());
+        System.out.print(getNombre());
     }
 
     public String getDNI() {
@@ -37,6 +36,8 @@ public class Persona {
     }
 
     public void printDNI(){
-        System.out.println(getDNI());
+        System.out.print(getDNI());
     }
+
+
 }

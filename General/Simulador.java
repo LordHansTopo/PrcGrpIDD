@@ -1,8 +1,14 @@
 package General;
 
+import Banco.*;
+
+import java.io.IOException;
+
 public class Simulador {
     //region atributos
     private InterfazDeUsuario interfaz;
+    private Banco banco = new Banco("Nombre");
+
     /*
     private BolsaDeValores bolsaDeValores;
     private BancoDeInversiones bancoDeInversiones;
@@ -25,15 +31,15 @@ public class Simulador {
     public void setBolsaDeValores(BolsaDeValores bolsaDeValores) {
         this.bolsaDeValores = bolsaDeValores;
     }
-
-    public BancoDeInversiones getBancoDeInversiones() {
-        return bancoDeInversiones;
+    */
+    public Banco getBanco() {
+        return banco;
     }
 
-    public void setBancoDeInversiones(BancoDeInversiones bancoDeInversiones) {
-        this.bancoDeInversiones = bancoDeInversiones;
+    public void setBanco(Banco banco) {
+        this.banco = banco;
     }
-
+    /*
     public AgenteDeInversiones getAgenteDeInversiones() {
         return agenteDeInversiones;
     }
@@ -55,7 +61,7 @@ public class Simulador {
                     System.exit(0);
                     break;
                 case 1:
-                    //getBancoDeInversores().EstadoClientes;
+                    getBanco().imprimirClientes();
                     System.out.println("WIP");
                     break;
                 case 2:
@@ -63,11 +69,15 @@ public class Simulador {
                     System.out.println("WIP");
                     break;
                 case 3:
-                    //getBancoDeInversores().AñadirCliente;
+                    try {
+                        getBanco().insertarCliente();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     System.out.println("WIP");
                     break;
                 case 4:
-                    //getBancoDeInversores().EliminarCliente;
+                    getBanco().eliminarCliente();
                     System.out.println("WIP");
                     break;
                 case 5:
@@ -79,7 +89,7 @@ public class Simulador {
                     System.out.println("WIP");
                     break;
                 case 7:
-                    //getBancoDeInversores().MejorarCliente;
+                    getBanco().mejorarCliente();
                     System.out.println("WIP");
                     break;
                 case 8:

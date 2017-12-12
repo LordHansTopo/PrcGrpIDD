@@ -24,4 +24,24 @@ public class Escaner {
             }
         }
     }
+    public double leerDouble(){
+        while (true) {
+            try {
+                return input.nextDouble();
+            } catch (InputMismatchException ex) {
+                System.out.println("Error: Valor introducido inválido, intenta de nuevo:");
+                input.next();
+            }
+        }
+    }
+    public String leerString(){
+        while (true) {
+            try {
+                return input.nextLine();
+            } catch (InputMismatchException ex) {
+                System.out.println("Error: Valor introducido inválido, intenta de nuevo:");
+                input.next();
+            }
+        }
+    }
 }
