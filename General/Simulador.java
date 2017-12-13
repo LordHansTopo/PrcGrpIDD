@@ -1,10 +1,12 @@
 package General;
 
+import Bolsa.BolsaDeValores;
+
 public class Simulador {
     //region atributos
     private InterfazDeUsuario interfaz;
-    /*
     private BolsaDeValores bolsaDeValores;
+    /*
     private BancoDeInversiones bancoDeInversiones;
     private AgenteDeInversiones agenteDeInversiones;
     */
@@ -17,15 +19,14 @@ public class Simulador {
     public void setInterfaz(InterfazDeUsuario interfaz) {
         this.interfaz = interfaz;
     }
-    /*
+
     public BolsaDeValores getBolsaDeValores() {
         return bolsaDeValores;
     }
-
     public void setBolsaDeValores(BolsaDeValores bolsaDeValores) {
         this.bolsaDeValores = bolsaDeValores;
     }
-
+    /*
     public BancoDeInversiones getBancoDeInversiones() {
         return bancoDeInversiones;
     }
@@ -46,6 +47,8 @@ public class Simulador {
     public Simulador(){
         InterfazDeUsuario interfazUsuario = new InterfazDeUsuario();
         setInterfaz(interfazUsuario);
+        BolsaDeValores bolsa = new BolsaDeValores();
+        setBolsaDeValores(bolsa);
     }
     public void comenzarSimulacion(){
         while(true) {
@@ -59,7 +62,7 @@ public class Simulador {
                     System.out.println("WIP");
                     break;
                 case 2:
-                    //getBolsaDeValores().EstadoBolsa;
+                    getBolsaDeValores().EstadoBolsa();
                     System.out.println("WIP");
                     break;
                 case 3:
@@ -87,15 +90,15 @@ public class Simulador {
                     System.out.println("WIP");
                     break;
                 case 9:
-                    //getBolsaDeValores().AñadirEmpresa;
+                    getBolsaDeValores().AñadirEmpresa();
                     System.out.println("WIP");
                     break;
                 case 10:
-                    //getBolsaDeValores().EliminarEmpresa;
+                    getBolsaDeValores().EliminarEmpresa();
                     System.out.println("WIP");
                     break;
                 case 11:
-                    //getBolsaDeValores().ActualizarValoresBolsa;
+                    getBolsaDeValores().ActualizarValoresBolsa();
                     System.out.println("WIP");
                     break;
                 case 12:
@@ -126,6 +129,7 @@ public class Simulador {
                     //getBancoDeInversiones().EjecutarOperaciones;
                     System.out.println("WIP");
                     break;
+
             }
         }
     }
