@@ -1,6 +1,7 @@
 package General;
 
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Escaner {
@@ -19,6 +20,16 @@ public class Escaner {
             try {
                 return input.nextInt();
             } catch (InputMismatchException ex) {
+                System.out.println("Error: Valor introducido inválido, intenta de nuevo:");
+                input.next();
+            }
+        }
+    }
+    public String leerString(){
+        while (true) {
+            try{
+                return input.nextLine();
+            } catch (NoSuchElementException ex){
                 System.out.println("Error: Valor introducido inválido, intenta de nuevo:");
                 input.next();
             }
