@@ -1,9 +1,11 @@
 package Banco;
 
 public class ClientePremium extends Cliente {
-
+    //Atributos
     private GestorDeInversiones gestor;
 
+    //Endregion
+    //Constructores
     public ClientePremium(String nombre, String DNI, Double saldo, GestorDeInversiones gestor){
         super(nombre, DNI, saldo);
         setGestor(gestor);
@@ -15,6 +17,8 @@ public class ClientePremium extends Cliente {
 
     }
 
+    //Endregion
+    //Getters y Setters
     public GestorDeInversiones getGestor() {
         return gestor;
     }
@@ -23,8 +27,6 @@ public class ClientePremium extends Cliente {
         this.gestor = gestor;
     }
 
-    public void mejorarPremium(Cliente cliente, GestorDeInversiones gestor){
+    //Endregion
 
-
-    }
 }

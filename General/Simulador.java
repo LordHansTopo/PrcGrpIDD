@@ -10,14 +10,10 @@ public class Simulador {
     //region atributos
     private InterfazDeUsuario interfaz;
 
-    private Banco banco = new Banco("Nombre");
-
-    /*
-
+    private BancoDeInversores bancoDeInversores;
     private BolsaDeValores bolsaDeValores;
-    private BancoDeInversiones bancoDeInversiones;
-    private AgenteDeInversiones agenteDeInversiones;
-    */
+    private AgenteInversiones agenteInversiones;
+
     //endregion
     //region Getters & Setters
     public InterfazDeUsuario getInterfaz() {
@@ -34,19 +30,19 @@ public class Simulador {
     public void setBolsaDeValores(BolsaDeValores bolsaDeValores) {
         this.bolsaDeValores = bolsaDeValores;
     }
-    public Banco getBanco() {
-        return banco;
+    public BancoDeInversores getBancoDeInversores() {
+        return bancoDeInversores;
     }
 
-    public void setBanco(Banco banco) {
-        this.banco = banco;
+    public void setBancoDeInversores(BancoDeInversores bancoDeInversores) {
+        this.bancoDeInversores = bancoDeInversores;
     }
-    public AgenteDeInversiones getAgenteDeInversiones() {
-        return agenteDeInversiones;
+    public AgenteInversiones getAgenteDeInversiones() {
+        return agenteInversiones;
     }
 
-    public void setAgenteDeInversiones(AgenteDeInversiones agenteDeInversiones) {
-        this.agenteDeInversiones = agenteDeInversiones;
+    public void setAgenteDeInversiones(AgenteInversiones agenteInversiones) {
+        this.agenteInversiones = agenteInversiones;
     }
     //endregion
     public Simulador(){
@@ -54,6 +50,8 @@ public class Simulador {
         setInterfaz(interfazUsuario);
         BolsaDeValores bolsa = new BolsaDeValores();
         setBolsaDeValores(bolsa);
+        BancoDeInversores bancoDeInversores = new BancoDeInversores("Nombre");
+        setBancoDeInversores(bancoDeInversores);
     }
     public void comenzarSimulacion(){
         while(true) {
@@ -63,7 +61,7 @@ public class Simulador {
                     System.exit(0);
                     break;
                 case 1:
-                    getBanco().imprimirClientes();
+                    getBancoDeInversores().imprimirClientes();
                     System.out.println("WIP");
                     break;
                 case 2:
@@ -71,19 +69,15 @@ public class Simulador {
                     System.out.println("WIP");
                     break;
                 case 3:
-                    try {
-                        getBanco().insertarCliente();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    getBancoDeInversores().insertarCliente();
                     System.out.println("WIP");
                     break;
                 case 4:
-                    getBanco().eliminarCliente();
+                    getBancoDeInversores().eliminarCliente();
                     System.out.println("WIP");
                     break;
                 case 5:
-                    //getBancoDeInversores().GuardarCopia;
+                    getBancoDeInversores().copiaSeguridad();
                     System.out.println("WIP");
                     break;
                 case 6:
@@ -91,7 +85,7 @@ public class Simulador {
                     System.out.println("WIP");
                     break;
                 case 7:
-                    getBanco().mejorarCliente();
+                    getBancoDeInversores().mejorarCliente();
                     System.out.println("WIP");
                     break;
                 case 8:

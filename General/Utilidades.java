@@ -11,4 +11,9 @@ public class Utilidades {
         Random r = new Random();
         return LimiteSup*r.nextDouble();
     }
+
+    public static int GenerarIntAleat(int LimiteInf,int LimiteSup){
+        Random r = new Random();
+        return LimiteInf + (LimiteSup-LimiteInf)*r.nextInt();
+    }
 }
