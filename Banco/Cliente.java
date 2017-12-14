@@ -1,8 +1,11 @@
-package practica;
+package Banco;
 
 
-public class Cliente extends Persona{
+import java.util.HashMap;
+
+public class Cliente extends Persona {
     private Double saldo;
+    private HashMap<String, PaqueteDeAcciones> paqueteDelCliente;
 
 
     public Cliente(String nombre, String DNI, Double saldo){
@@ -19,6 +22,7 @@ public class Cliente extends Persona{
     }
 
     public void printSaldo(){
-        System.out.println(getSaldo());
+        System.out.print(getSaldo());
     }
+
 }

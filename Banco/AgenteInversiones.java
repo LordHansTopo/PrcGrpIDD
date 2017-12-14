@@ -1,4 +1,4 @@
-package practica;
+package Banco;
 
 public class AgenteInversiones extends Persona {
 
