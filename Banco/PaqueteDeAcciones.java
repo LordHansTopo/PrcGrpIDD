@@ -1,19 +1,25 @@
 package Banco;
 public class PaqueteDeAcciones{
+    //Atributos
     private String nombreEmpresa;
     private Integer numeroTitulos;
     private Double precioIndividual;
 
+    //Atributos derivados
     private Double precioCompleto;
     private Double precioOriginal;
     private Double variacion;
 
+    //Endregion
+    //Constructor
     public PaqueteDeAcciones(String nombreEmpresa, Integer numeroTitulos, Double precioIndividual) {
         this.nombreEmpresa = nombreEmpresa;
         this.numeroTitulos = numeroTitulos;
         this.precioOriginal = precioOriginal;
     }
 
+    //Endregion
+    //Getters y Setters
     public String getNombreEmpresa() {
         return nombreEmpresa;
     }
@@ -62,6 +68,6 @@ public class PaqueteDeAcciones{
         this.variacion = (getPrecioCompleto() - getPrecioOriginal());
     }
 
-
+    //Endregion
 
 }
