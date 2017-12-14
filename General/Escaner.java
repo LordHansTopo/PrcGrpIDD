@@ -1,6 +1,7 @@
 package General;
 
 import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Escaner {
@@ -24,6 +25,7 @@ public class Escaner {
             }
         }
     }
+
     public double leerDouble(){
         while (true) {
             try {
@@ -34,11 +36,12 @@ public class Escaner {
             }
         }
     }
+    
     public String leerString(){
         while (true) {
-            try {
+            try{
                 return input.nextLine();
-            } catch (InputMismatchException ex) {
+            } catch (NoSuchElementException ex){
                 System.out.println("Error: Valor introducido inválido, intenta de nuevo:");
                 input.next();
             }
