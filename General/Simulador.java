@@ -1,19 +1,14 @@
 package General;
 
-
-import java.io.IOException;
-import Bolsa.BolsaDeValores;
+import Bolsa.*;
 import Banco.*;
-
 
 public class Simulador {
     //region atributos
     private InterfazDeUsuario interfaz;
-
     private BancoDeInversores bancoDeInversores;
     private BolsaDeValores bolsaDeValores;
     private AgenteInversiones agenteInversiones;
-
     //endregion
     //region Getters & Setters
     public InterfazDeUsuario getInterfaz() {
@@ -45,6 +40,7 @@ public class Simulador {
         this.agenteInversiones = agenteInversiones;
     }
     //endregion
+
     public Simulador(){
         InterfazDeUsuario interfazUsuario = new InterfazDeUsuario();
         setInterfaz(interfazUsuario);
@@ -62,23 +58,18 @@ public class Simulador {
                     break;
                 case 1:
                     getBancoDeInversores().imprimirClientes();
-                    System.out.println("WIP");
                     break;
                 case 2:
                     getBolsaDeValores().EstadoBolsa();
-                    System.out.println("WIP");
                     break;
                 case 3:
                     getBancoDeInversores().insertarCliente();
-                    System.out.println("WIP");
                     break;
                 case 4:
                     getBancoDeInversores().eliminarCliente();
-                    System.out.println("WIP");
                     break;
                 case 5:
                     getBancoDeInversores().copiaSeguridad();
-                    System.out.println("WIP");
                     break;
                 case 6:
                     //getBancoDeInversores().CargarCopia;
@@ -86,7 +77,6 @@ public class Simulador {
                     break;
                 case 7:
                     getBancoDeInversores().mejorarCliente();
-                    System.out.println("WIP");
                     break;
                 case 8:
                     //getBancoDeInversores().Recomendacion;
@@ -94,23 +84,18 @@ public class Simulador {
                     break;
                 case 9:
                     getBolsaDeValores().AñadirEmpresa();
-                    System.out.println("WIP");
                     break;
                 case 10:
                     getBolsaDeValores().EliminarEmpresa();
-                    System.out.println("WIP");
                     break;
                 case 11:
                     getBolsaDeValores().ActualizarValoresBolsa();
-                    System.out.println("WIP");
                     break;
                 case 12:
-                    //getBolsaDeValores().GuardarCopia;
-                    System.out.println("WIP");
+                    getBolsaDeValores().GuardarCopia();
                     break;
                 case 13:
-                    //getBolsaDeValores().CargarCopia;
-                    System.out.println("WIP");
+                    setBolsaDeValores(getBolsaDeValores().CargarCopia());
                     break;
                 case 14:
                     //getBancoDeInversiones().ComprarAcciones;
