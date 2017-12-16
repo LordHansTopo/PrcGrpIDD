@@ -61,46 +61,33 @@ public class BolsaDeValores implements Serializable{
         System.out.println("Valor de acciones de todas las empresas actualizados.");
     }
     public void GuardarCopia(){
-        try{
-           ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("CopiaBolsa.bin"));
-           try{
-           output.writeObject(this);
-           }
-           finally{
-               output.close();
-           }
+        try(FileOutputStream file = new FileOutputStream("CopiaBolsa.bin")){
+            ObjectOutputStream output = new ObjectOutputStream(file);
+            output.writeObject(this.bolsa);
         }
         catch(FileNotFoundException fnfex){
-            System.out.println("Error al crear el archivo");
+            System.out.println("Error: No se puede escribir el fichero en disco. (FileNotFoundException)");
         }
         catch(IOException ioex){
-            System.out.println("Error de E/S");
+            System.out.println("Error de E/S. (IOException)");
         }
     }
-    public BolsaDeValores CargarCopia(){
-        BolsaDeValores copiaBolsa = null;
-        try {
-            ObjectInputStream input = new ObjectInputStream(new FileInputStream("CopiaBolsa.bin"));
-            try {
-                try {
-                    copiaBolsa = (BolsaDeValores) input.readObject();
-                } catch (EOFException eof) {
-                    //Fin de fichero
-                }
-            }
-            finally {
-                    input.close();
-                }
+    public void CargarCopia(){
+        try(
+                InputStream file = new FileInputStream("CopiaBolsa.bin");
+                InputStream buffer = new BufferedInputStream(file);
+                ObjectInput input = new ObjectInputStream(buffer);
+        ){
+            HashSet<Empresa> bolsaDeserializada = (HashSet<Empresa>) input.readObject();
         }
         catch(FileNotFoundException fnfex){
-            System.out.println("Error: No existe el archivo CopiaBolsa.bin o no se puede leer.");
+            System.out.println("Error: No se puede leer el fichero o no existe. (FileNotFoundException)");
         }
         catch(IOException ioex){
-            System.out.println("Error de E/S");
+            System.out.println("Error de E/S (IOException)");
         }
-        catch (ClassNotFoundException cnfex) {
-            System.out.println("Error: Clase no encontrada");
+        catch(ClassNotFoundException cnfex){
+            System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassNotFoundException)");
         }
-        return copiaBolsa;
     }
 }
