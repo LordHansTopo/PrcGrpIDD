@@ -95,7 +95,7 @@ public class Simulador {
                     getBolsaDeValores().GuardarCopia();
                     break;
                 case 13:
-                    setBolsaDeValores(getBolsaDeValores().CargarCopia());
+                    getBolsaDeValores().CargarCopia();
                     break;
                 case 14:
                     //getBancoDeInversiones().ComprarAcciones;
