@@ -48,6 +48,7 @@ public class Simulador {
         setBolsaDeValores(bolsa);
         BancoDeInversores bancoDeInversores = new BancoDeInversores("Nombre");
         setBancoDeInversores(bancoDeInversores);
+        getBolsaDeValores().CargarCopia("DefectoBolsa.bin");
     }
     public void comenzarSimulacion(){
         while(true) {
@@ -92,10 +93,10 @@ public class Simulador {
                     getBolsaDeValores().ActualizarValoresBolsa();
                     break;
                 case 12:
-                    getBolsaDeValores().GuardarCopia();
+                    getBolsaDeValores().GuardarCopia("CopiaBolsa.bin");
                     break;
                 case 13:
-                    getBolsaDeValores().CargarCopia();
+                    getBolsaDeValores().CargarCopia("CopiaBolsa.bin");
                     break;
                 case 14:
                     //getBancoDeInversiones().ComprarAcciones;
