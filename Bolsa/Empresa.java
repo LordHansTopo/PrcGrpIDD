@@ -1,8 +1,9 @@
 package Bolsa;
 
 import General.Utilidades;
+import java.io.Serializable;
 
-public class Empresa {
+public class Empresa implements Serializable{
     private String nombre;
     private double valor;
     private double valorAnt;

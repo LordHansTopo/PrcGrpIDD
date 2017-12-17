@@ -3,11 +3,15 @@ package Bolsa;
 import General.Escaner;
 import General.Utilidades;
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 
 public class BolsaDeValores implements Serializable{
-    private HashSet<Empresa> bolsa = new HashSet<>();
+    private HashSet<Empresa> bolsa;
 
+    public BolsaDeValores(){
+        this.bolsa = new HashSet<Empresa>();
+    }
     public void AñadirEmpresa(){
         Escaner escaner = new Escaner();
         System.out.println("Introduzca el nombre de la empresa a añadir:");
@@ -43,9 +47,10 @@ public class BolsaDeValores implements Serializable{
         if (!this.bolsa.isEmpty()) {
             for (Empresa empresa : this.bolsa) {
                 System.out.println("Nombre: " + empresa.getNombre());
-                System.out.println("Valor actual de acción: " + empresa.getValor());
-                System.out.println("Valor anterior de acción: " + empresa.getValorAnt());
-                System.out.println("Incremento: " + empresa.getIncremento() + "\n");
+                DecimalFormat formateadorValores = new DecimalFormat("0.00");
+                System.out.println("Valor actual de acción: " + formateadorValores.format(empresa.getValor())+ "€" );
+                System.out.println("Valor anterior de acción: " + formateadorValores.format(empresa.getValorAnt())+ "€" );
+                System.out.println("Incremento: " + formateadorValores.format(empresa.getIncremento()) + "€" + "\n");
             }
         }
         else{
@@ -60,31 +65,37 @@ public class BolsaDeValores implements Serializable{
         }
         System.out.println("Valor de acciones de todas las empresas actualizados.");
     }
-    public void GuardarCopia(){
-        try(FileOutputStream file = new FileOutputStream("CopiaBolsa.bin")){
+    public void GuardarCopia(String path){
+        try(FileOutputStream file = new FileOutputStream(path)){
             ObjectOutputStream output = new ObjectOutputStream(file);
             output.writeObject(this.bolsa);
+            System.out.println("Copia guardada con éxito en " + path);
         }
         catch(FileNotFoundException fnfex){
             System.out.println("Error: No se puede escribir el fichero en disco. (FileNotFoundException)");
         }
         catch(IOException ioex){
             System.out.println("Error de E/S. (IOException)");
+            ioex.getCause();
+            ioex.getMessage();
         }
     }
-    public void CargarCopia(){
+    public void CargarCopia(String path){
         try(
-                InputStream file = new FileInputStream("CopiaBolsa.bin");
+                InputStream file = new FileInputStream(path);
                 InputStream buffer = new BufferedInputStream(file);
                 ObjectInput input = new ObjectInputStream(buffer);
         ){
-            HashSet<Empresa> bolsaDeserializada = (HashSet<Empresa>) input.readObject();
+            this.bolsa = (HashSet<Empresa>) input.readObject();
+            System.out.println("Copia guardada con éxito en " + path);
         }
         catch(FileNotFoundException fnfex){
             System.out.println("Error: No se puede leer el fichero o no existe. (FileNotFoundException)");
         }
         catch(IOException ioex){
             System.out.println("Error de E/S (IOException)");
+            ioex.getCause();
+            ioex.getMessage();
         }
         catch(ClassNotFoundException cnfex){
             System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassNotFoundException)");
