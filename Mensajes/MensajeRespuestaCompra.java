@@ -1,7 +1,7 @@
 
 package Mensajes;
 
-public class MensajeRespuestaCompra {
+public class MensajeRespuestaCompra extends MensajeCompra{
     private String mensaje;
     
     public String crearMensajeRespCompra(int identificador, String nombre, String empresa, int dinero, int valor){

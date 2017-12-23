@@ -3,6 +3,8 @@ package General;
 import Bolsa.*;
 import Banco.*;
 
+import java.io.File;
+
 public class Simulador {
     //region atributos
     private InterfazDeUsuario interfaz;
@@ -42,13 +44,14 @@ public class Simulador {
     //endregion
 
     public Simulador(){
+
         InterfazDeUsuario interfazUsuario = new InterfazDeUsuario();
         setInterfaz(interfazUsuario);
         BolsaDeValores bolsa = new BolsaDeValores();
         setBolsaDeValores(bolsa);
         BancoDeInversores bancoDeInversores = new BancoDeInversores("Nombre");
         setBancoDeInversores(bancoDeInversores);
-        getBolsaDeValores().CargarCopia("DefectoBolsa.bin");
+        getBolsaDeValores().CargarCopia("DefectoBolsa.bin"); //Cargar valores por defecto de bolsa
     }
     public void comenzarSimulacion(){
         while(true) {
