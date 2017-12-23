@@ -1,5 +1,3 @@
-package Mensajes;
-
 /*
 package Mensaje;
 import java.io.*;
