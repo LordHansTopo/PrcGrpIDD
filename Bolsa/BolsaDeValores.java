@@ -87,7 +87,7 @@ public class BolsaDeValores implements Serializable{
                 ObjectInput input = new ObjectInputStream(buffer);
         ){
             this.bolsa = (HashSet<Empresa>) input.readObject();
-            System.out.println("Copia guardada con éxito en " + path);
+            System.out.println("Copia cargada con éxito en " + path);
         }
         catch(FileNotFoundException fnfex){
             System.out.println("Error: No se puede leer el fichero o no existe. (FileNotFoundException)");
