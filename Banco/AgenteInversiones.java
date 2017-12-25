@@ -1,9 +1,8 @@
 package Banco;
 
+import Bolsa.BolsaDeValores;
 import Mensajes.*;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.SortedSet;
 
 public class AgenteInversiones extends Persona {
 
@@ -14,8 +13,13 @@ public class AgenteInversiones extends Persona {
         operacionesPendientes = new ArrayList<Mensaje>();
         resultadoDeOperaciones = new ArrayList<Mensaje>();
     }
-    public void guardarOperacionCompra(String Cliente, String Empresa, double cantidadMax){
-        Mensaje operacionCompra = new MensajeCompra(Cliente,Empresa,cantidadMax);
-        operacionesPendientes.add(operacionCompra);
+    public void guardarOperacion(Mensaje operacion){
+        operacionesPendientes.add(operacion);
+    }
+    public void EjectuarOperaciones(BolsaDeValores bolsa){ //WIP
+        for (Mensaje actual : operacionesPendientes){
+            String respuestaCodificado = bolsa.intentaOperacion(actual.codificaMensaje());
+            Mensaje.parser(respuestaCodificado);
+        }
     }
 }

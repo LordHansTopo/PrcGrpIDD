@@ -1,7 +1,12 @@
 package Banco;
 
+import Bolsa.BolsaDeValores;
 import Excepciones.ExcepcionClientes;
+import Excepciones.ExcepcionNoExisteValor;
+import Excepciones.ExcepcionSaldoInsuficiente;
 import General.Escaner;
+import Mensajes.MensajeCompra;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -91,7 +96,7 @@ public class BancoDeInversores {
         }
     }
 
-    public void eliminarClientePremium(String DNI){
+    private void eliminarClientePremium(String DNI){
         if (this.clientesPremium.containsKey(DNI)){
             this.clientesPremium.remove(DNI);
         }
@@ -138,7 +143,7 @@ public class BancoDeInversores {
         }
     }
 
-    public void desmejorarCliente(){   //No se utiliza ni pide en ningun momento, pero lo añado
+    public void desmejorarCliente(){   //No se utiliza ni pide en ningun momento, pero lo añado (por que me sale de los huevos)?
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
@@ -183,6 +188,33 @@ public class BancoDeInversores {
             System.out.println("Error, camino incorrecto");
             System.out.println(ex.getCause());
             System.out.println(ex.getMessage());
+        }
+    }
+    public void ComprarAcciones(BolsaDeValores bolsa,AgenteInversiones agente){
+        try {
+            Escaner escaner = new Escaner();
+            System.out.println("Introduzca el DNI del cliente: ");
+            String DNI = escaner.leerString();
+            if (!clientes.containsKey(DNI)) throw new ExcepcionNoExisteValor();
+
+            String nombreCliente = clientes.get(DNI).getNombre();
+            System.out.println("Introduzca el nombre de la empresa: ");
+            String empresa = escaner.leerString();
+            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionNoExisteValor();
+
+            System.out.println("Introduzca la cantidad máxima a invertir: ");
+            double cantidadMax = escaner.leerDouble();
+            if (clientes.get(DNI).getSaldo()<cantidadMax) throw new ExcepcionSaldoInsuficiente();
+
+            MensajeCompra operacionCompra = new MensajeCompra(nombreCliente, empresa, cantidadMax);
+            agente.guardarOperacion(operacionCompra);
+            System.out.println("Petición almacenada en la lista de peticiones del bróker.");
+        }
+        catch (ExcepcionNoExisteValor e){
+            System.out.println("El valor introducido no existe");
+        }
+        catch (ExcepcionSaldoInsuficiente e){
+            System.out.println("El cliente no tiene dinero suficiente para realizar esta operación.");
         }
     }
     //Endregion
