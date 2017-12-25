@@ -12,114 +12,78 @@ public class Simulador {
     private BolsaDeValores bolsaDeValores;
     private AgenteInversiones agenteInversiones;
     //endregion
-    //region Getters & Setters
-    public InterfazDeUsuario getInterfaz() {
-        return interfaz;
-    }
-
-    public void setInterfaz(InterfazDeUsuario interfaz) {
-        this.interfaz = interfaz;
-    }
-
-    public BolsaDeValores getBolsaDeValores() {
-        return bolsaDeValores;
-    }
-    public void setBolsaDeValores(BolsaDeValores bolsaDeValores) {
-        this.bolsaDeValores = bolsaDeValores;
-    }
-    public BancoDeInversores getBancoDeInversores() {
-        return bancoDeInversores;
-    }
-
-    public void setBancoDeInversores(BancoDeInversores bancoDeInversores) {
-        this.bancoDeInversores = bancoDeInversores;
-    }
-    public AgenteInversiones getAgenteDeInversiones() {
-        return agenteInversiones;
-    }
-
-    public void setAgenteDeInversiones(AgenteInversiones agenteInversiones) {
-        this.agenteInversiones = agenteInversiones;
-    }
-    //endregion
-
     public Simulador(){
-
-        InterfazDeUsuario interfazUsuario = new InterfazDeUsuario();
-        setInterfaz(interfazUsuario);
-        BolsaDeValores bolsa = new BolsaDeValores();
-        setBolsaDeValores(bolsa);
-        BancoDeInversores bancoDeInversores = new BancoDeInversores("Nombre");
-        setBancoDeInversores(bancoDeInversores);
-        getBolsaDeValores().CargarCopia("DefectoBolsa.bin"); //Cargar valores por defecto de bolsa
+        this.interfaz = new InterfazDeUsuario();
+        this.bolsaDeValores = new BolsaDeValores();
+        this.bancoDeInversores = new BancoDeInversores("Nombre");
+        this.agenteInversiones = new AgenteInversiones("Marco Polo","123456789A");
+        bolsaDeValores.CargarCopia("DefectoBolsa.bin"); //Cargar valores por defecto de bolsa
     }
     public void comenzarSimulacion(){
         while(true) {
-            switch (getInterfaz().iniciarInterfaz()) {
+            switch (interfaz.iniciarInterfaz()) {
                 case 0:
                     System.out.println("Saliendo..");
                     System.exit(0);
                     break;
                 case 1:
-                    getBancoDeInversores().imprimirClientes();
+                    bancoDeInversores.imprimirClientes();
                     break;
                 case 2:
-                    getBolsaDeValores().EstadoBolsa();
+                    bolsaDeValores.EstadoBolsa();
                     break;
                 case 3:
-                    getBancoDeInversores().insertarCliente();
+                    bancoDeInversores.insertarCliente();
                     break;
                 case 4:
-                    getBancoDeInversores().eliminarCliente();
+                    bancoDeInversores.eliminarCliente();
                     break;
                 case 5:
-                    getBancoDeInversores().copiaSeguridad();
+                    bancoDeInversores.copiaSeguridad();
                     break;
                 case 6:
-                    //getBancoDeInversores().CargarCopia;
+                    //bancoDeInversores.cargarCopia();
                     System.out.println("WIP");
                     break;
                 case 7:
-                    getBancoDeInversores().mejorarCliente();
+                    bancoDeInversores.mejorarCliente();
                     break;
                 case 8:
-                    //getBancoDeInversores().Recomendacion;
+                    //bancoDeInversores.Recomendacion();
                     System.out.println("WIP");
                     break;
                 case 9:
-                    getBolsaDeValores().AñadirEmpresa();
+                    bolsaDeValores.AñadirEmpresa();
                     break;
                 case 10:
-                    getBolsaDeValores().EliminarEmpresa();
+                    bolsaDeValores.EliminarEmpresa();
                     break;
                 case 11:
-                    getBolsaDeValores().ActualizarValoresBolsa();
+                    bolsaDeValores.ActualizarValoresBolsa();
                     break;
                 case 12:
-                    getBolsaDeValores().GuardarCopia("CopiaBolsa.bin");
+                    bolsaDeValores.GuardarCopia("CopiaBolsa.bin");
                     break;
                 case 13:
-                    getBolsaDeValores().CargarCopia("CopiaBolsa.bin");
+                    bolsaDeValores.CargarCopia("CopiaBolsa.bin");
                     break;
                 case 14:
-                    //getBancoDeInversiones().ComprarAcciones;
-                    System.out.println("WIP");
+                    bancoDeInversores.ComprarAcciones(bolsaDeValores,agenteInversiones);
                     break;
                 case 15:
-                    //getBancoDeInversiones().VenderAcciones;
+                    //bancoDeInversiones.VenderAcciones();
                     System.out.println("WIP");
                     break;
                 case 16:
-                    //getBancoDeInversiones().ActualizarValoresBanco;
+                    //bancoDeInversiones.ActualizarValoresBanco();
                     System.out.println("WIP");
                     break;
                 case 17:
-                    //getAgenteDeInversiones().ImprimirOperaciones;
+                    //agenteInversiones.ImprimirOperaciones();
                     System.out.println("WIP");
                     break;
                 case 18:
-                    //getBancoDeInversiones().EjecutarOperaciones;
-                    System.out.println("WIP");
+                    agenteInversiones.EjectuarOperaciones(bolsaDeValores);
                     break;
 
             }
