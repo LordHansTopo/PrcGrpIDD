@@ -2,39 +2,17 @@
 package Mensajes;
 
 public class MensajeRespuestaCompra extends MensajeCompra{
-    private boolean resultadoOp;
-    private int accionesCompradas;
-    private double precioAccion,cantidadRestante;
-
-    public boolean isResultadoOp() {
-        return resultadoOp;
+    private String mensaje;
+    
+    public String crearMensajeRespCompra(int identificador, String nombre, String empresa, int dinero, int valor){
+        if(dinero>=valor)
+            this.mensaje= new StringBuilder().append(String.valueOf(identificador)).append("|").append(nombre).append("|")
+                    .append(empresa).append("|").append("true").append("|").append(String.valueOf((int)dinero/valor))
+                    .append("|").append(valor).append(dinero-(valor*((int)dinero/valor))).toString();
+        else this.mensaje=new StringBuilder().append(String.valueOf(identificador)).append("|").append(nombre).append("|")
+                .append(empresa).append("|").append("false").append("|").append("0").append("|").append(String.valueOf((int)dinero/valor))
+                .append("|").append(String.valueOf(dinero)).toString();
+        return mensaje;
     }
-
-    public int getAccionesCompradas() {
-        return accionesCompradas;
-    }
-
-    public double getPrecioAccion() {
-        return precioAccion;
-    }
-
-    public double getCantidadRestante() {
-        return cantidadRestante;
-    }
-
-    public MensajeRespuestaCompra(int ID, String Cliente, boolean resultado, int compradas, double precioAccion, double restante){
-        identificador=ID;
-        cliente=Cliente;
-        resultadoOp=resultado;
-        accionesCompradas=compradas;
-        this.precioAccion=precioAccion;
-        cantidadRestante=restante;
-    }
-    public String codificaMensaje(){
-        return identificador + "|" + cliente + "|" + resultadoOp + "|" + accionesCompradas + "|" + precioAccion + "|" + cantidadRestante;
-    }
-
 }
-
-//[5004(id)|DNI(nom)|Kokacola(emp)|true/false|2(numAcc)|250(precioAcc)|50(dinero restante)]
-
+//[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|250(precioAcc)|50(dinero restante)]

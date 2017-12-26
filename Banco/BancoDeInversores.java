@@ -1,12 +1,7 @@
 package Banco;
 
-import Bolsa.BolsaDeValores;
 import Excepciones.ExcepcionClientes;
-import Excepciones.ExcepcionNoExisteValor;
-import Excepciones.ExcepcionSaldoInsuficiente;
 import General.Escaner;
-import Mensajes.MensajeCompra;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,16 +9,16 @@ import java.io.*;
 
 
 
-public class BancoDeInversores {
-    //Atributos
+public class BancoDeInversores implements Serializable{
+    //region Atributos
     private String nombre;
     private AgenteInversiones agenteInversiones;
     private ArrayList<GestorDeInversiones> gestores;
     private HashMap<String, Cliente> clientes;
     private HashMap<String, ClientePremium> clientesPremium;
 
-    //Endregion
-    //Constructor
+    //endregion
+    //region Constructor
     public BancoDeInversores(String nombre){
         setNombre(nombre);
         setAgenteInversiones(getAgenteInversiones()); //revisar
@@ -31,9 +26,8 @@ public class BancoDeInversores {
         clientes = new HashMap<String, Cliente>();
         clientesPremium = new HashMap<String, ClientePremium>();
     }
-
-    //Endregion
-    //Getters y Setters
+    //endregion
+    //region Getters y Setters
     public void setAgenteInversiones(AgenteInversiones agenteInversiones) {
         this.agenteInversiones = agenteInversiones;
     }
@@ -51,48 +45,54 @@ public class BancoDeInversores {
     }
 
 
-
-    //Endregion
-    //Otros metodos
-    public void insertarCliente(){
+    //endregion
+    //region Otros metodos
+    public void insertarCliente() throws ExcepcionClientes{
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
-        try {
-            if (!this.clientes.containsKey(DNI)) {
-                System.out.println("Introduzca nombre del cliente");
-                String nombre = escaner.leerString();
-                System.out.println("Introduzca el saldo del cliente");
-                Double saldo = escaner.leerDouble();
+        Boolean validar = new General.Utilidades().validarDNI(DNI);
+        if(validar) {
+            try {
+                if (!this.clientes.containsKey(DNI)) {
+                    System.out.println("Introduzca nombre del cliente");
+                    String nombre = escaner.leerString();
+                    System.out.println("Introduzca el saldo del cliente");
+                    Double saldo = escaner.leerDouble();
 
-                Cliente cliente = new Cliente(nombre, DNI, saldo);
-                this.clientes.put(DNI, cliente);
-                System.out.println("Cliente introducido correctamente");
-            } else {
-                throw new ExcepcionClientes("Cliente ya pertenece");
+                    Cliente cliente = new Cliente(nombre, DNI, saldo);
+                    this.clientes.put(DNI, cliente);
+                    System.out.println("Cliente introducido correctamente");
+                } else {
+                    throw new ExcepcionClientes("Cliente ya pertenece");
+                }
+            } catch (ExcepcionClientes ex) {
+                ex.getMessage();
             }
-        }catch(ExcepcionClientes ex){
-            ex.getMessage();
+        } else {
+            throw new ExcepcionClientes("Valor de DNI no valido");
         }
     }
 
-
-    public void eliminarCliente(){
+    public void eliminarCliente()throws ExcepcionClientes{
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
-        try{
-            if (this.clientesPremium.containsKey(DNI)) {
-                eliminarClientePremium(DNI);
+        Boolean validar = new General.Utilidades().validarDNI(DNI);
+        if(validar) {
+            try{
+                if (this.clientes.containsKey(DNI)){
+                    eliminarClientePremium(DNI);
+                    this.clientes.remove(DNI);
+                    System.out.println("Cliente con DNI: "+ DNI + " Ha sido correctamente eliminado");
+                }else {
+                    throw new ExcepcionClientes("Cliente no pertenece al banco");
+                }
+            }catch(ExcepcionClientes ex){
+                ex.getMessage();
             }
-            if (this.clientes.containsKey(DNI)){
-                this.clientes.remove(DNI);
-                System.out.println("Cliente con DNI: "+ DNI + " Ha sido correctamente eliminado");
-            }else {
-                throw new ExcepcionClientes("Cliente no pertenece al banco");
-            }
-        }catch(ExcepcionClientes ex){
-            ex.getMessage();
+        } else {
+            throw new ExcepcionClientes("Valor de DNI no valido");
         }
     }
 
@@ -117,16 +117,16 @@ public class BancoDeInversores {
         }
     }
 
-    public void mejorarCliente(){
+    public void mejorarCliente() throws ExcepcionClientes {
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
-        try{
+        Boolean validar = new General.Utilidades().validarDNI(DNI);
+        if(validar) {
             if (this.clientes.containsKey(DNI) == true){
                 try{
                     if (this.clientesPremium.containsKey(DNI) == false){
-                        int aleatorio = (new General.Utilidades().GenerarIntAleat(1, this.gestores.size()))-1;
-
+                        int aleatorio = (new General.Utilidades().GenerarIntAleat(1, this.gestores.size())-1);
                         ClientePremium cliente = new ClientePremium(this.clientes.get(DNI), this.gestores.get(aleatorio));
                         this.clientesPremium.put(cliente.getDNI(), cliente);
                     }else{
@@ -138,12 +138,12 @@ public class BancoDeInversores {
             }else{
                 throw new ExcepcionClientes("Error, cliente no pertenece al banco");
             }
-        }catch (ExcepcionClientes ex){
-            ex.getMessage();
+        } else {
+            throw new ExcepcionClientes("Valor de DNI no valido");
         }
     }
 
-    public void desmejorarCliente(){   //No se utiliza ni pide en ningun momento, pero lo añado (por que te sale de los huevos)?
+    public void desmejorarCliente(){   //No se utiliza ni pide en ningun momento, pero lo añado
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
@@ -153,7 +153,7 @@ public class BancoDeInversores {
                     if(this.clientesPremium.containsKey(DNI)) {
                         this.clientesPremium.remove(DNI);
                     }else{
-                        throw new ExcepcionClientes("Cliente ya es premium");
+                        throw new ExcepcionClientes("Cliente no es premium");
                     }
                 }catch (ExcepcionClientes ex){
                     ex.getMessage();
@@ -166,22 +166,15 @@ public class BancoDeInversores {
         }
     }
 
-    public void copiaSeguridad(){
+    public void guardarCopiaSeguridad(){
         System.out.println("Introduzca el destino de guardado de la copia");
         Escaner escaner = new Escaner();
         String path = escaner.leerString();
         try{
             FileOutputStream fileOutput = new FileOutputStream(path);
-            ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
-            objectOutput.writeObject(this.clientes);
-            objectOutput.close();
-
-
-            path = path + "Premium";
-
-            FileOutputStream fileOutputPremium = new FileOutputStream(path);
-            ObjectOutputStream objectOutputPremium = new ObjectOutputStream(fileOutputPremium);
-            objectOutput.writeObject(this.clientesPremium);
+            BufferedOutputStream bufferedOutput = new BufferedOutputStream(fileOutput);
+            ObjectOutputStream objectOutput = new ObjectOutputStream(bufferedOutput);
+            objectOutput.writeObject(this);
             objectOutput.close();
 
         } catch(Exception ex){
@@ -190,60 +183,23 @@ public class BancoDeInversores {
             System.out.println(ex.getMessage());
         }
     }
-    public void ComprarAcciones(BolsaDeValores bolsa,AgenteInversiones agente){
-        try {
-            Escaner escaner = new Escaner();
-            System.out.println("Introduzca el DNI del cliente: ");
-            String DNI = escaner.leerString();
-            if (!clientes.containsKey(DNI) && !clientesPremium.containsKey(DNI)) throw new ExcepcionNoExisteValor();
 
-            System.out.println("Introduzca el nombre de la empresa: ");
-            String empresa = escaner.leerString();
-            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionNoExisteValor();
-
-            System.out.println("Introduzca la cantidad máxima a invertir: ");
-            double cantidadMax = escaner.leerDouble();
-            if (clientes.get(DNI).getSaldo()<cantidadMax) throw new ExcepcionSaldoInsuficiente();
-
-            MensajeCompra operacionCompra = new MensajeCompra(DNI, empresa, cantidadMax);
-            agente.guardarOperacion(operacionCompra);
-            System.out.println("Petición almacenada en la lista de peticiones del bróker.");
-        }
-        catch (ExcepcionNoExisteValor e){
-            System.out.println("El valor introducido no existe.");
-        }
-        catch (ExcepcionSaldoInsuficiente e){
-            System.out.println("El cliente no tiene dinero suficiente para realizar esta operación.");
-        }
-    }
-    public void VenderAcciones(BolsaDeValores bolsa, AgenteInversiones agente){ //WIP
+    public void cargarCopiaSeguridad(){
+        System.out.println("Introduzca el destino de carga de la copia");
+        Escaner escaner = new Escaner();
+        String path = escaner.leerString();
         try{
-            Escaner escaner = new Escaner();
-            System.out.println("Introduzca el DNI del cliente: ");
-            String DNI = escaner.leerString();
-            if (!clientes.containsKey(DNI) && !clientesPremium.containsKey(DNI)) throw new ExcepcionNoExisteValor();
+            FileInputStream fileInput = new FileInputStream(path);
+            BufferedInputStream bufferedInput = new BufferedInputStream(fileInput);
+            ObjectInputStream objectInput = new ObjectInputStream(bufferedInput);
+            BancoDeInversores banco = (BancoDeInversores) objectInput.readObject();
+            objectInput.close();
 
-            System.out.println("Introduzca el nombre de la empresa: ");
-            String empresa = escaner.leerString();
-            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionNoExisteValor();
-
-            System.out.println("Introduzca el número de acciones a vender: ");
-            int acciones = escaner.leerInt();
-
-        }
-        catch (ExcepcionNoExisteValor ex){
-            System.out.println("El valor introducido no existe");
+        } catch(Exception ex){
+            System.out.println("Error, camino incorrecto");
+            System.out.println(ex.getCause());
+            System.out.println(ex.getMessage());
         }
     }
-    public void ComprarAccion (String DNI,String Empresa, int numAcciones, double precioAccion, double cantRestante){
-        //Implementar
-    }
-    public void VenderAccion (String DNI, String Empresa, int numAcciones, double ganancias){
-        //Implementar
-    }
-    public void ActualizarClientes(String[] empresas, Integer[] precios){
-        //Cada valor de cada array esta relacionado entre ellos ej.: precios[0] es el valor de accion de emrpesas[0]
-        //Implementar
-    }
-    //Endregion
+    //endregion
 }

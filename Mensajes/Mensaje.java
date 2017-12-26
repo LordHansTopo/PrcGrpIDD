@@ -1,11 +1,16 @@
 
 package Mensajes;
-
-abstract public class Mensaje {
-    protected static int identificador=0;
-
-    abstract public String codificaMensaje();
-    public static String[] parser(String mensajeCodificado){
-        return mensajeCodificado.split("|");
-    }
+import java.io.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+public class Mensaje {
+    /*
+  public Mensajes(){
+      this.mensaje=new HashMap<String, tipoMensaje()>();
+      Mensajes mensajeVenta= new Mensajes("Venta");
+      this.mensaje
+  }
+  */
 }

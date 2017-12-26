@@ -2,7 +2,6 @@ package Bolsa;
 
 import General.Utilidades;
 import java.io.Serializable;
-import java.text.DecimalFormat;
 
 public class Empresa implements Serializable{
     private String nombre;
@@ -47,20 +46,5 @@ public class Empresa implements Serializable{
         this.setValor(Utilidades.GenerarNumAleat(5000));
         this.setValorAnt(0);
         this.setIncremento(0);
-    }
-    public boolean equals(Object o1){ //Dos empresas son iguales si tienen el mismo nombre
-        return (this.nombre.equals(((Empresa)o1).getNombre()));
-    }
-    public void imprimirInfo(){
-        System.out.println("Nombre: " + nombre);
-        DecimalFormat formateadorValores = new DecimalFormat("0.00");
-        System.out.println("Valor actual de acción: " + formateadorValores.format(valor)+ "€" );
-        System.out.println("Valor anterior de acción: " + formateadorValores.format(valorAnt)+ "€" );
-        System.out.println("Incremento: " + formateadorValores.format(incremento) + "€" + "\n");
-    }
-    public void actualizarValoresEmpresa(){
-        valorAnt=valor;
-        valor=Utilidades.GenerarNumAleat(20000);
-        incremento=valor-valorAnt;
     }
 }

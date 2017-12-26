@@ -1,19 +1,19 @@
 package Banco;
 
 public class Persona {
-    //Atributos
+    //region Atributos
     private String nombre;
     private String DNI;
 
-    //Endregion
-    //Constructor
+    //endregion
+    //region Constructor
     public Persona(String nombre, String DNI){
         setNombre(nombre);
         setDNI(DNI);
     }
 
-    //Endregion
-    //Getters y Setters
+    //endregion
+    //region Getters y Setters
     public String getNombre() {
         return nombre;
     }
@@ -30,8 +30,8 @@ public class Persona {
         this.DNI = DNI;
     }
 
-    //Endregion
-    //Otros metodos
+    //endregion
+    //region Otros metodos
     public void printNombre(){
         System.out.print(getNombre());
     }
@@ -40,5 +40,5 @@ public class Persona {
         System.out.print(getDNI());
     }
 
-    //Endregion
+    //endregion
 }
