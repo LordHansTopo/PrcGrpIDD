@@ -2,11 +2,16 @@
 package Mensajes;
 
 public class MensajeActualizacion extends Mensaje{
-    private String mensaje;
+    protected String cliente, empresa;
+    protected MensajeActualizacion(){}
+    public MensajeActualizacion(String Cliente, String Empresa){
+        this.cliente=Cliente;
+        this.empresa=Empresa;
+
+    }
     
-    private String creaMensajeCompra(int identificador, String nombre, String empresa, int valorAnt){
+    public String codificaMensaje(){
         
-        return this.mensaje= new StringBuilder().append(String.valueOf(identificador)).append("|").append(nombre).append("|").append(empresa).append("|").append(String.valueOf(valorAnt)).toString();
-       
+        return identificador +"|"+ cliente +"|" + empresa;
     }
 }
