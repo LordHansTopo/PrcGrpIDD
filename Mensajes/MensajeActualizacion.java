@@ -15,5 +15,6 @@ public class MensajeActualizacion extends Mensaje{
         return identificador +"|"+ cliente +"|" + empresa;
         //Debe devolver
         //Identificador|Fecha de solicitud (formato yyyyMMddHHmmss)
+
     }
 }
