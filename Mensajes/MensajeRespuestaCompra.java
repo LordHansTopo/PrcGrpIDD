@@ -19,4 +19,4 @@ public class MensajeRespuestaCompra extends MensajeCompra{
     }
 
 }
-//[5004(id)|Antonio(nom)|true/false|2(numAcc)|250(precioAcc)|50(dinero restante)]
+//[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|250(precioAcc)|50(dinero restante)]
