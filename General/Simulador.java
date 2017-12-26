@@ -15,7 +15,7 @@ public class Simulador {
     public Simulador(){
         this.interfaz = new InterfazDeUsuario();
         this.bolsaDeValores = new BolsaDeValores();
-        this.bancoDeInversores = new BancoDeInversores("Nombre");
+        this.bancoDeInversores = new BancoDeInversores("Banco de Madril Ofisial");
         this.agenteInversiones = new AgenteInversiones("Marco Polo","123456789A");
         bolsaDeValores.CargarCopia("DefectoBolsa.bin"); //Cargar valores por defecto de bolsa
     }
@@ -39,11 +39,10 @@ public class Simulador {
                     bancoDeInversores.eliminarCliente();
                     break;
                 case 5:
-                    bancoDeInversores.copiaSeguridad();
+                    bancoDeInversores.guardarCopiaSeguridad();
                     break;
                 case 6:
-                    //bancoDeInversores.cargarCopia();
-                    System.out.println("WIP");
+                    bancoDeInversores.cargarCopiaSeguridad();
                     break;
                 case 7:
                     bancoDeInversores.mejorarCliente();
@@ -68,7 +67,7 @@ public class Simulador {
                     bolsaDeValores.CargarCopia("CopiaBolsa.bin");
                     break;
                 case 14:
-                    bancoDeInversores.ComprarAcciones(bolsaDeValores,agenteInversiones);
+                    //bancoDeInversores.ComprarAcciones(bolsaDeValores,agenteInversiones);
                     break;
                 case 15:
                     //bancoDeInversores.VenderAcciones();

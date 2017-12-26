@@ -6,7 +6,7 @@ public class ClientePremium extends Cliente {
 
     //Endregion
     //Constructores
-    public ClientePremium(String nombre, String DNI, Double saldo, GestorDeInversiones gestor){
+    public ClientePremium(String nombre, String DNI, double saldo, GestorDeInversiones gestor){
         super(nombre, DNI, saldo);
         setGestor(gestor);
     }
