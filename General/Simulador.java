@@ -71,11 +71,11 @@ public class Simulador {
                     bancoDeInversores.ComprarAcciones(bolsaDeValores,agenteInversiones);
                     break;
                 case 15:
-                    //bancoDeInversiones.VenderAcciones();
+                    //bancoDeInversores.VenderAcciones();
                     System.out.println("WIP");
                     break;
                 case 16:
-                    //bancoDeInversiones.ActualizarValoresBanco();
+                    //bancoDeInversores.ActualizarValoresBanco();
                     System.out.println("WIP");
                     break;
                 case 17:
@@ -83,7 +83,7 @@ public class Simulador {
                     System.out.println("WIP");
                     break;
                 case 18:
-                    agenteInversiones.EjectuarOperaciones(bolsaDeValores);
+                    agenteInversiones.EjecutarOperaciones(bolsaDeValores,bancoDeInversores);
                     break;
 
             }
