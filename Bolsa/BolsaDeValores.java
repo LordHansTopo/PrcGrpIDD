@@ -102,7 +102,7 @@ public class BolsaDeValores implements Serializable{
         String[] datos = Mensaje.parser(mensajeCodificado);
         double valorAccion = bolsa.get(datos[2]).getValor();
         boolean operacionRealizable = Double.parseDouble(datos[3]) > valorAccion;
-        int accionesCompradas = (int) (Double.parseDouble(datos[3])/valorAccion);
+        int accionesCompradas = (int) (Double.parseDouble(datos[3]) / valorAccion);
 
         MensajeRespuestaCompra mensajeRespuestaCompra = new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1],
                 operacionRealizable,accionesCompradas,valorAccion,

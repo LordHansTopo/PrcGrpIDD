@@ -13,6 +13,14 @@ public class MensajeCompra extends Mensaje{
         this.cantidadMax=CantidadMax;
     }
 
+    public String getCliente() {
+        return cliente;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
     public String codificaMensaje(){
 
         return identificador +"|"+ cliente +"|" + empresa + "|"+ cantidadMax;

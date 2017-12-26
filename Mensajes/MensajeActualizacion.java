@@ -13,5 +13,8 @@ public class MensajeActualizacion extends Mensaje{
     public String codificaMensaje(){
         
         return identificador +"|"+ cliente +"|" + empresa;
+        //Debe devolver
+        //Identificador|Fecha de solicitud (formato yyyyMMddHHmmss)
+
     }
 }

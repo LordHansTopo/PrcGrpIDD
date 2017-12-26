@@ -14,6 +14,23 @@ public class MensajeRespuestaVenta extends MensajeCompra{
         this.precioAccion=precioAccion;
         gananciasTotales=totales;
     }
+
+    public boolean isResultadoOp() {
+        return resultadoOp;
+    }
+
+    public int getAccionesVendidas() {
+        return accionesVendidas;
+    }
+
+    public double getPrecioAccion() {
+        return precioAccion;
+    }
+
+    public double getGananciasTotales() {
+        return gananciasTotales;
+    }
+
     public String codificaMensaje(){
         return identificador + "|" + cliente + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion + "|" + gananciasTotales;
     }

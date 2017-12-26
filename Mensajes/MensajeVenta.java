@@ -3,18 +3,31 @@ package Mensajes;
 
 public class MensajeVenta extends Mensaje{
     protected String cliente, empresa;
-    private double precioAcc;
+    private int numAcc;
     protected MensajeVenta(){} 
-    public MensajeVenta(String Cliente, String Empresa, double PrecioAcc){
+    public MensajeVenta(String Cliente, String Empresa, int numAcc){
       identificador++;
       this.cliente=Cliente;
       this.empresa=Empresa;
-      this.precioAcc=PrecioAcc;
+      this.numAcc=numAcc;
     }
-            
+
+    public String getCliente() {
+        return cliente;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public int getNumAcc() {
+        return numAcc;
+    }
+
     public String codificaMensaje(){
        
-        return identificador +"|"+ cliente +"|"+ empresa +"|"+ precioAcc;
+        return identificador +"|"+ cliente +"|"+ empresa +"|"+ numAcc;
+
     }
 
 }
