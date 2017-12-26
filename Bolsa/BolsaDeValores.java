@@ -1,68 +1,62 @@
 package Bolsa;
 
+import Excepciones.ExcepcionExistenciaEmpresa;
 import General.Escaner;
 import General.Utilidades;
+import Mensajes.Mensaje;
+import Mensajes.MensajeRespuestaCompra;
+
 import java.io.*;
 import java.text.DecimalFormat;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class BolsaDeValores implements Serializable{
-    private HashSet<Empresa> bolsa;
+    private HashMap<String,Empresa> bolsa;
 
     public BolsaDeValores(){
-        this.bolsa = new HashSet<Empresa>();
+        this.bolsa = new HashMap<String,Empresa>();
     }
     public void AñadirEmpresa(){
         Escaner escaner = new Escaner();
         System.out.println("Introduzca el nombre de la empresa a añadir:");
         String nombre = escaner.leerString();
-        if (this.bolsa.add(new Empresa(nombre))) System.out.println("Empresa introducida con éxito.");
-        else System.out.println("Error: La empresa ya existe.");
+        try {
+            if (bolsa.containsKey(nombre)) throw new ExcepcionExistenciaEmpresa();
+            else {
+                Empresa empresa = new Empresa(nombre);
+                bolsa.put(nombre,empresa);
+            }
+        }
+        catch (ExcepcionExistenciaEmpresa e){
+            System.out.println("La empresa ya existe.");
+        }
     }
 
     public void EliminarEmpresa(){
         Escaner escaner = new Escaner();
         System.out.println("Introduzca el nombre de la empresa a eliminar:");
         String eliminarNombre = escaner.leerString();
-        boolean eliminada=false;
-        if (!this.bolsa.isEmpty()) {
-            for (Empresa empresa : this.bolsa) {
-                if (empresa.getNombre().equalsIgnoreCase(eliminarNombre)){
-                    eliminada = this.bolsa.remove(empresa);
-                    break;
-                }
+        try{
+            if (bolsa.containsKey(eliminarNombre)){
+                bolsa.remove(eliminarNombre);
             }
-            if (eliminada){
-                System.out.println("Empresa eliminada con éxito.");
-            }
-            else{
-                System.out.println("No se ha encontrado la empresa en la bolsa.");
-            }
+            else throw new ExcepcionExistenciaEmpresa();
         }
-        else{
-            System.out.println("La bolsa no contiene empresas.");
+        catch(ExcepcionExistenciaEmpresa e){
+            System.out.println("La empresa no existe en la bolsa");
         }
     }
     public void EstadoBolsa(){
         if (!this.bolsa.isEmpty()) {
-            for (Empresa empresa : this.bolsa) {
-                System.out.println("Nombre: " + empresa.getNombre());
-                DecimalFormat formateadorValores = new DecimalFormat("0.00");
-                System.out.println("Valor actual de acción: " + formateadorValores.format(empresa.getValor())+ "€" );
-                System.out.println("Valor anterior de acción: " + formateadorValores.format(empresa.getValorAnt())+ "€" );
-                System.out.println("Incremento: " + formateadorValores.format(empresa.getIncremento()) + "€" + "\n");
-            }
+            bolsa.forEach((k,v) -> v.imprimirInfo());
         }
         else{
             System.out.println("La bolsa no contiene empresas.");
         }
     }
     public void ActualizarValoresBolsa(){
-        for (Empresa empresa : this.bolsa) {
-            empresa.setValorAnt(empresa.getValor());
-            empresa.setValor(Utilidades.GenerarNumAleat(20000));
-            empresa.setIncremento(empresa.getValor()-empresa.getValorAnt());
-        }
+        bolsa.forEach((k,v) -> v.actualizarValoresEmpresa());
         System.out.println("Valor de acciones de todas las empresas actualizados.");
     }
     public void GuardarCopia(String path){
@@ -86,7 +80,7 @@ public class BolsaDeValores implements Serializable{
                 InputStream buffer = new BufferedInputStream(file);
                 ObjectInput input = new ObjectInputStream(buffer);
         ){
-            this.bolsa = (HashSet<Empresa>) input.readObject();
+            this.bolsa = (HashMap<String,Empresa>) input.readObject();
             System.out.println("Copia cargada con éxito en " + path);
         }
         catch(FileNotFoundException fnfex){
@@ -100,5 +94,19 @@ public class BolsaDeValores implements Serializable{
         catch(ClassNotFoundException cnfex){
             System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassNotFoundException)");
         }
+    }
+    public boolean existeEmpresa(String nombreEmpresa){ //Usado en el banco de inversiones para controlar excepciones
+        return bolsa.containsKey(nombreEmpresa);
+    }
+    public String intentaOperacion(String mensajeCodificado) { //WIP
+        String[] datos = Mensaje.parser(mensajeCodificado);
+        double valorAccion = bolsa.get(datos[2]).getValor();
+        boolean operacionRealizable = Double.parseDouble(datos[3]) > valorAccion;
+        int accionesCompradas = (int) (Double.parseDouble(datos[3]) / valorAccion);
+
+        MensajeRespuestaCompra mensajeRespuestaCompra = new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1],
+                operacionRealizable,accionesCompradas,valorAccion,
+                Double.parseDouble(datos[3])-accionesCompradas*valorAccion);
+        return mensajeRespuestaCompra.codificaMensaje();
     }
 }

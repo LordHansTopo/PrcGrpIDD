@@ -2,20 +2,24 @@ package Banco;
 public class PaqueteDeAcciones{
     //region Atributos
     private String nombreEmpresa;
-    private Integer numeroTitulos;
-    private Double precioIndividual;
+    private int numeroTitulos;
+    private double precioIndividual;
 
     //Atributos derivados
-    private Double precioCompleto;
-    private Double precioOriginal;
-    private Double variacion;
+    private double precioCompleto;
+    private double precioOriginal;
+    private double variacion;
 
     //endregion
     //region Constructor
-    public PaqueteDeAcciones(String nombreEmpresa, Integer numeroTitulos, Double precioIndividual) {
+    public PaqueteDeAcciones(String nombreEmpresa, Integer numeroTitulos, double precioIndividual) {
         this.nombreEmpresa = nombreEmpresa;
         this.numeroTitulos = numeroTitulos;
-        this.precioOriginal = precioOriginal;
+        this.precioIndividual = precioIndividual;
+        this.precioCompleto = (numeroTitulos * precioIndividual);
+        this.precioOriginal = precioIndividual;
+        this.variacion = 0.0;
+
     }
 
     //endregion
@@ -40,7 +44,7 @@ public class PaqueteDeAcciones{
         return precioIndividual;
     }
 
-    public void setPrecioIndividual(Double precioIndividual) {
+    public void setPrecioIndividual(double precioIndividual) {
         this.precioIndividual = precioIndividual;
     }
 
@@ -48,7 +52,7 @@ public class PaqueteDeAcciones{
         return precioCompleto;
     }
 
-    public void setPrecioCompleto(Double precioCompleto) {
+    public void setPrecioCompleto() {
         this.precioCompleto = (getNumeroTitulos() * getPrecioIndividual());
     }
 
@@ -56,7 +60,7 @@ public class PaqueteDeAcciones{
         return precioOriginal;
     }
 
-    public void setPrecioOriginal(Double precioOriginal) {
+    public void setPrecioOriginal(double precioOriginal) {
         this.precioOriginal = precioOriginal;
     }
 
@@ -64,10 +68,17 @@ public class PaqueteDeAcciones{
         return variacion;
     }
 
-    public void setVariacion(Double variacion) {
+    public void setVariacion() {
         this.variacion = (getPrecioCompleto() - getPrecioOriginal());
     }
 
     //endregion
+    //region Otros metodos
+    public void actualizarValores(Double precioActual){
+        setPrecioIndividual(precioActual);
+        setPrecioCompleto();
+        setVariacion();
+    }
 
+    //endregion
 }
