@@ -22,16 +22,18 @@ public class MensajeRespuestaCompra extends MensajeCompra{
         return cantidadRestante;
     }
 
-    public MensajeRespuestaCompra(int ID, String Cliente, boolean resultado, int compradas, double precioAccion, double restante){
-        identificador=ID;
+    public MensajeRespuestaCompra(String Cliente, String Empresa,boolean resultado, int compradas, double precioAccion, double restante){
+        super();
         cliente=Cliente;
+        empresa=Empresa;
         resultadoOp=resultado;
         accionesCompradas=compradas;
         this.precioAccion=precioAccion;
         cantidadRestante=restante;
     }
     public String codificaMensaje(){
-        return identificador + "|" + cliente + "|" + resultadoOp + "|" + accionesCompradas + "|" + precioAccion + "|" + cantidadRestante;
+        return this.getIdentificador() + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesCompradas + "|" +
+                precioAccion + "|" + cantidadRestante;
     }
 
 }

@@ -67,19 +67,18 @@ public class Simulador {
                     bolsaDeValores.CargarCopia("CopiaBolsa.bin");
                     break;
                 case 14:
-                    //bancoDeInversores.ComprarAcciones(bolsaDeValores,agenteInversiones);
+                    bancoDeInversores.ComprarAcciones(bolsaDeValores,agenteInversiones);
                     break;
                 case 15:
-                    //bancoDeInversores.VenderAcciones();
+                    bancoDeInversores.VenderAcciones(bolsaDeValores,agenteInversiones);
                     System.out.println("WIP");
                     break;
                 case 16:
-                    //bancoDeInversores.ActualizarValoresBanco();
+                    //bancoDeInversores.ActualizarValoresBanco(bolsaDeValores,agenteInversiones);
                     System.out.println("WIP");
                     break;
                 case 17:
-                    //agenteInversiones.ImprimirOperaciones();
-                    System.out.println("WIP");
+                    agenteInversiones.ImprimirOperaciones();
                     break;
                 case 18:
                     agenteInversiones.EjecutarOperaciones(bolsaDeValores,bancoDeInversores);

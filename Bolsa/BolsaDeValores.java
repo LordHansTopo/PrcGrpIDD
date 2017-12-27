@@ -4,7 +4,9 @@ import Excepciones.ExcepcionExistenciaEmpresa;
 import General.Escaner;
 import General.Utilidades;
 import Mensajes.Mensaje;
+import Mensajes.MensajeRespuestaActualizacion;
 import Mensajes.MensajeRespuestaCompra;
+import Mensajes.MensajeRespuestaVenta;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -100,13 +102,26 @@ public class BolsaDeValores implements Serializable{
     }
     public String intentaOperacion(String mensajeCodificado) { //WIP
         String[] datos = Mensaje.parser(mensajeCodificado);
-        double valorAccion = bolsa.get(datos[2]).getValor();
-        boolean operacionRealizable = Double.parseDouble(datos[3]) > valorAccion;
-        int accionesCompradas = (int) (Double.parseDouble(datos[3]) / valorAccion);
-
-        MensajeRespuestaCompra mensajeRespuestaCompra = new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1],
-                operacionRealizable,accionesCompradas,valorAccion,
-                Double.parseDouble(datos[3])-accionesCompradas*valorAccion);
-        return mensajeRespuestaCompra.codificaMensaje();
+        try{ //Comprobar tipo de mensaje
+            int comprobarTipoMensaje = Integer.parseInt(datos[3]);
+            //Si el mensaje es MensajeVenta
+            MensajeRespuestaVenta respuesta = new MensajeRespuestaVenta(datos[1],datos[2],
+                    (bolsa.get(datos[2]).getValor()!=0),Integer.parseInt(datos[3]),bolsa.get(datos[2]).getValor(),
+                    (Integer.parseInt(datos[3])*bolsa.get(datos[2]).getValor()));
+            return respuesta.codificaMensaje();
+        }
+        catch (NumberFormatException mensajeCompra){ //Si el mensaje es MensajeCompra
+            boolean esRealizable = Double.parseDouble(datos[3]) < bolsa.get(datos[2]).getValor();
+            int numCompradas = (int) (Double.parseDouble(datos[3])/bolsa.get(datos[2]).getValor());
+            MensajeRespuestaCompra respuesta= new MensajeRespuestaCompra(datos[1],datos[2],
+                    esRealizable,numCompradas,bolsa.get(datos[2]).getValor(),
+                    (Double.parseDouble(datos[3])-numCompradas*(bolsa.get(datos[2]).getValor())));
+            return respuesta.codificaMensaje();
+        }
+        catch (ArrayIndexOutOfBoundsException mensajeActualizacion){ //Si el mensaje es MensajeActualizacion
+            //MensajeRespuestaActualizacion respuesta = new MensajeRespuestaActualizacion();
+            //return respuesta.codificaMensaje();
+            return null;
+        }
     }
 }

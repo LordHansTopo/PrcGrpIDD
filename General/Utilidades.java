@@ -18,7 +18,10 @@ public class Utilidades {
         Random r = new Random();
         return LimiteInf + (LimiteSup-LimiteInf)*r.nextInt();
     }
-
+    public static int GenerarIntAleat(int LimiteSup){
+        Random r = new Random();
+        return LimiteSup*r.nextInt();
+    }
     public static boolean validarDNI(String DNI) {
         boolean correcto = false;
         Pattern pattern = Pattern.compile("(\\d{1,8})([TRWAGMYFPDXBNJZSQVHLCKEtrwagmyfpdxbnjzsqvhlcke])");
@@ -38,6 +41,5 @@ public class Utilidades {
             correcto = false;
         }
         return correcto;
-
     }
 }

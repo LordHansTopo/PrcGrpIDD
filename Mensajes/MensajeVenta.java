@@ -6,7 +6,7 @@ public class MensajeVenta extends Mensaje{
     private int numAcc;
     protected MensajeVenta(){} 
     public MensajeVenta(String Cliente, String Empresa, int numAcc){
-      identificador++;
+      super();
       this.cliente=Cliente;
       this.empresa=Empresa;
       this.numAcc=numAcc;
@@ -26,7 +26,7 @@ public class MensajeVenta extends Mensaje{
 
     public String codificaMensaje(){
        
-        return identificador +"|"+ cliente +"|"+ empresa +"|"+ numAcc;
+        return this.getIdentificador() +"|"+ cliente +"|"+ empresa +"|"+ numAcc;
 
     }
 
