@@ -12,7 +12,7 @@ public class MensajeActualizacion extends Mensaje{
     
     public String codificaMensaje(){
         
-        return identificador +"|"+ cliente +"|" + empresa;
+        return this.getIdentificador() +"|"+ cliente +"|" + empresa;
         //Debe devolver
         //Identificador|Fecha de solicitud (formato yyyyMMddHHmmss)
 

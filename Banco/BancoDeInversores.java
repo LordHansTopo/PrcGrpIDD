@@ -1,8 +1,11 @@
 package Banco;
 
+import Bolsa.BolsaDeValores;
 import Excepciones.*;
 import General.Escaner;
 import General.Utilidades;
+import Mensajes.MensajeCompra;
+import Mensajes.MensajeVenta;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -220,7 +223,7 @@ public class BancoDeInversores implements Serializable{
         }
     }
 
-    public void ComprarAccion (String DNI,String Empresa, int numAcciones, double precioAccion, double cantRestante){
+    public void ComprarAccion (String DNI,String Empresa, int numAcciones, double precioAccion, double cantRestante) throws ExcepcionClientes{
         try{
             if(this.clientes.containsKey(DNI)){
                 this.clientes.get(DNI).compraPaquete(Empresa, numAcciones, precioAccion);
@@ -260,6 +263,58 @@ public class BancoDeInversores implements Serializable{
             newCliente.put(arrayClientes[k].getDNI(), arrayClientes[k]);
         }
         this.clientes = newCliente;
+    }
+    public void ComprarAcciones(BolsaDeValores bolsa,AgenteInversiones agente){
+        try {
+            Escaner escaner = new Escaner();
+            System.out.println("Introduzca el DNI del cliente: ");
+            String DNI = escaner.leerString();
+            if (!clientes.containsKey(DNI) && !clientesPremium.containsKey(DNI)) throw new ExcepcionNoExisteValor();
+
+            System.out.println("Introduzca el nombre de la empresa: ");
+            String empresa = escaner.leerString();
+            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionNoExisteValor();
+
+            System.out.println("Introduzca la cantidad máxima a invertir: ");
+            double cantidadMax = escaner.leerDouble();
+            if (clientes.get(DNI).getSaldo()<cantidadMax) throw new ExcepcionSaldoInsuficiente();
+
+            MensajeCompra operacionCompra = new MensajeCompra(DNI, empresa, cantidadMax);
+            agente.guardarOperacion(operacionCompra);
+            System.out.println("Petición almacenada en la lista de peticiones del bróker.");
+        }
+        catch (ExcepcionNoExisteValor e){
+            System.out.println("El valor introducido no existe.");
+        }
+        catch (ExcepcionSaldoInsuficiente e){
+            System.out.println("El cliente no tiene dinero suficiente para realizar esta operación.");
+        }
+    }
+    public void VenderAcciones(BolsaDeValores bolsa, AgenteInversiones agente){ //WIP
+        try{
+            Escaner escaner = new Escaner();
+            System.out.println("Introduzca el DNI del cliente: ");
+            String DNI = escaner.leerString();
+            if (!clientes.containsKey(DNI) && !clientesPremium.containsKey(DNI)) throw new ExcepcionNoExisteValor();
+
+            System.out.println("Introduzca el nombre de la empresa: ");
+            String empresa = escaner.leerString();
+            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionNoExisteValor();
+
+            System.out.println("Introduzca el número de acciones a vender: ");
+            int acciones = escaner.leerInt();
+            if (acciones<=0) throw new ExcepcionNoNulo();
+
+            MensajeVenta operacionVenta = new MensajeVenta(DNI,empresa,acciones);
+            agente.guardarOperacion(operacionVenta);
+            System.out.println("Petición almacenada en la lista de peticiones del bróker.");
+        }
+        catch (ExcepcionNoExisteValor ex){
+            System.out.println("El valor introducido no existe");
+        }
+        catch (ExcepcionNoNulo ex){
+            System.out.println("Error: no se puede comprar este número de acciones.");
+        }
     }
     //endregion
 }
