@@ -1,6 +1,5 @@
 
 package Mensajes;
-import java.time.Instant;
 
 public class MensajeActualizacion extends Mensaje{
     protected String cliente, empresa;
@@ -12,7 +11,10 @@ public class MensajeActualizacion extends Mensaje{
     }
     
     public String codificaMensaje(){
-        Instant fecha = Instant.now();
-        return this.getIdentificador() +"|"+ fecha;
+        
+        return this.getIdentificador() +"|"+ cliente +"|" + empresa;
+        //Debe devolver
+        //Identificador|Fecha de solicitud (formato yyyyMMddHHmmss)
+
     }
 }

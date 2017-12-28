@@ -12,7 +12,7 @@ public class MensajeCompra extends Mensaje{
         this.empresa=Empresa;
         this.cantidadMax=CantidadMax;
     }
-    
+
     public String getCliente() {
         return cliente;
     }
@@ -24,7 +24,7 @@ public class MensajeCompra extends Mensaje{
     public double getCantidadMax() {
         return cantidadMax;
     }
-    
+
     public String codificaMensaje(){
 
         return this.getIdentificador() +"|"+ cliente +"|" + empresa + "|"+ cantidadMax;
