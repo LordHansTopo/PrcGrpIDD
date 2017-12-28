@@ -28,6 +28,7 @@ public class BolsaDeValores implements Serializable{
             else {
                 Empresa empresa = new Empresa(nombre);
                 bolsa.put(nombre,empresa);
+                System.out.println("La empresa ha sido introducida con éxito.");
             }
         }
         catch (ExcepcionExistenciaEmpresa e){
@@ -42,6 +43,7 @@ public class BolsaDeValores implements Serializable{
         try{
             if (bolsa.containsKey(eliminarNombre)){
                 bolsa.remove(eliminarNombre);
+                System.out.println("Empresa eliminada con éxito.");
             }
             else throw new ExcepcionExistenciaEmpresa();
         }
@@ -72,8 +74,6 @@ public class BolsaDeValores implements Serializable{
         }
         catch(IOException ioex){
             System.out.println("Error de E/S. (IOException)");
-            ioex.getCause();
-            ioex.getMessage();
         }
     }
     public void CargarCopia(String path){
@@ -90,8 +90,6 @@ public class BolsaDeValores implements Serializable{
         }
         catch(IOException ioex){
             System.out.println("Error de E/S (IOException)");
-            ioex.getCause();
-            ioex.getMessage();
         }
         catch(ClassNotFoundException cnfex){
             System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassNotFoundException)");
@@ -100,7 +98,7 @@ public class BolsaDeValores implements Serializable{
     public boolean existeEmpresa(String nombreEmpresa){ //Usado en el banco de inversiones para controlar excepciones
         return bolsa.containsKey(nombreEmpresa);
     }
-    public String intentaOperacion(String mensajeCodificado) { //WIP
+    public String intentaOperacion(String mensajeCodificado) {
         String[] datos = Mensaje.parser(mensajeCodificado);
         try{ //Comprobar tipo de mensaje
             int comprobarTipoMensaje = Integer.parseInt(datos[3]);
@@ -125,6 +123,7 @@ public class BolsaDeValores implements Serializable{
             for (Empresa valor : bolsa.values()){
                 nombresEmpresas[i] = valor.getNombre();
                 valoresAcciones[i] = valor.getValor();
+                i++;
             }
             MensajeRespuestaActualizacion respuesta = new MensajeRespuestaActualizacion(Integer.parseInt(datos[0]),
                     nombresEmpresas,valoresAcciones);

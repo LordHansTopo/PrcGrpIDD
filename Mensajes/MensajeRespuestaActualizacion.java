@@ -25,10 +25,12 @@ public class MensajeRespuestaActualizacion extends MensajeActualizacion{
     }
 
     public String codificaMensaje(){
-        String mensaje = identificador + "|";
+        String mensaje = null;
         StringBuilder sb = new StringBuilder();
-        for (int i =0;i<=nombresEmpresas.length;i++){
-            mensaje = sb.append(nombresEmpresas[i]).append("|").append(valoresAcciones[i]).append("|").toString();
+        sb.append(identificador).append("|");
+        for (int i = 0;i<nombresEmpresas.length;i++){
+            mensaje = sb.append(nombresEmpresas[i]).append("|")
+                    .append(valoresAcciones[i]).append("|").toString();
         }
         return mensaje;
     }

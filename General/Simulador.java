@@ -71,11 +71,9 @@ public class Simulador {
                     break;
                 case 15:
                     bancoDeInversores.VenderAcciones(bolsaDeValores,agenteInversiones);
-                    System.out.println("WIP");
                     break;
                 case 16:
-                    bancoDeInversores.ActualizarValoresBanco(bolsaDeValores,agenteInversiones);
-                    System.out.println("WIP");
+                    bancoDeInversores.ActualizarValoresBanco(agenteInversiones);
                     break;
                 case 17:
                     agenteInversiones.ImprimirOperaciones();
