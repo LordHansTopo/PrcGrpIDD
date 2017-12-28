@@ -6,16 +6,14 @@ public class MensajeRespuestaVenta extends MensajeCompra{
     private int accionesVendidas;
     private double precioAccion,gananciasTotales;
 
-    public MensajeRespuestaVenta(String Cliente, String Empresa, boolean resultado, int vendidas,double precioAccion,double totales){
+    public MensajeRespuestaVenta(String Cliente, boolean resultado, int vendidas,double precioAccion,double totales){
         super();
         cliente=Cliente;
-        empresa=Empresa;
         resultadoOp=resultado;
         accionesVendidas=vendidas;
         this.precioAccion=precioAccion;
         gananciasTotales=totales;
     }
-
     public boolean isResultadoOp() {
         return resultadoOp;
     }
@@ -33,7 +31,7 @@ public class MensajeRespuestaVenta extends MensajeCompra{
     }
 
     public String codificaMensaje(){
-        return this.getIdentificador() + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion + "|" + gananciasTotales;
+        return this.getIdentificador() + "|" + cliente + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion + "|" + gananciasTotales;
     }
 
 }
