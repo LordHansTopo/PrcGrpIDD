@@ -1,18 +1,23 @@
-
 package Mensajes;
-import java.time.Instant;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class MensajeActualizacion extends Mensaje{
     protected String cliente, empresa;
-    protected MensajeActualizacion(){}
-    public MensajeActualizacion(String Cliente, String Empresa){
-        this.cliente=Cliente;
-        this.empresa=Empresa;
-
+    protected LocalDateTime fecha;
+    public MensajeActualizacion(){
+        super();
+        this.fecha=LocalDateTime.now();
     }
-    
+
+    public String getFecha() {
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return fecha.format(formateador);
+    }
+
     public String codificaMensaje(){
-        Instant fecha = Instant.now();
-        return this.getIdentificador() +"|"+ fecha;
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        return identificador + "|" + fecha.format(formateador);
     }
 }
