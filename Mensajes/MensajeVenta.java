@@ -25,7 +25,7 @@ public class MensajeVenta extends Mensaje{
     
     public String codificaMensaje(){
        
-        return this.getIdentificador() +"|"+ cliente +"|"+ empresa +"|"+ numAcc;
+        return identificador +"|"+ cliente +"|"+ empresa +"|"+ numAcc;
     }
 
 }

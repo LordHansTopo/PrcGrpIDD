@@ -6,9 +6,10 @@ public class MensajeRespuestaVenta extends MensajeCompra{
     private int accionesVendidas;
     private double precioAccion,gananciasTotales;
 
-    public MensajeRespuestaVenta(String Cliente, boolean resultado, int vendidas,double precioAccion,double totales){
-        super();
+    public MensajeRespuestaVenta(int ID, String Cliente, String Empresa, boolean resultado, int vendidas,double precioAccion,double totales){
+        identificador=ID;
         cliente=Cliente;
+        empresa=Empresa;
         resultadoOp=resultado;
         accionesVendidas=vendidas;
         this.precioAccion=precioAccion;
@@ -31,7 +32,8 @@ public class MensajeRespuestaVenta extends MensajeCompra{
     }
 
     public String codificaMensaje(){
-        return this.getIdentificador() + "|" + cliente + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion + "|" + gananciasTotales;
+        return identificador + "|" + cliente + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion
+                + "|" + gananciasTotales;
     }
 
 }

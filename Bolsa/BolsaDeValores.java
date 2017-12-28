@@ -105,23 +105,30 @@ public class BolsaDeValores implements Serializable{
         try{ //Comprobar tipo de mensaje
             int comprobarTipoMensaje = Integer.parseInt(datos[3]);
             //Si el mensaje es MensajeVenta
-            MensajeRespuestaVenta respuesta = new MensajeRespuestaVenta(datos[1],datos[2],
-                    (bolsa.get(datos[2]).getValor()!=0),Integer.parseInt(datos[3]),bolsa.get(datos[2]).getValor(),
-                    (Integer.parseInt(datos[3])*bolsa.get(datos[2]).getValor()));
+            MensajeRespuestaVenta respuesta = new MensajeRespuestaVenta(Integer.parseInt(datos[0]),datos[1],datos[2],
+                    (bolsa.get(datos[2]).getValor()!=0),comprobarTipoMensaje,bolsa.get(datos[2]).getValor(),
+                    (comprobarTipoMensaje*bolsa.get(datos[2]).getValor()));
             return respuesta.codificaMensaje();
         }
         catch (NumberFormatException mensajeCompra){ //Si el mensaje es MensajeCompra
             boolean esRealizable = Double.parseDouble(datos[3]) < bolsa.get(datos[2]).getValor();
             int numCompradas = (int) (Double.parseDouble(datos[3])/bolsa.get(datos[2]).getValor());
-            MensajeRespuestaCompra respuesta= new MensajeRespuestaCompra(datos[1],datos[2],
+            MensajeRespuestaCompra respuesta= new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1],datos[2],
                     esRealizable,numCompradas,bolsa.get(datos[2]).getValor(),
                     (Double.parseDouble(datos[3])-numCompradas*(bolsa.get(datos[2]).getValor())));
             return respuesta.codificaMensaje();
         }
         catch (ArrayIndexOutOfBoundsException mensajeActualizacion){ //Si el mensaje es MensajeActualizacion
-            //MensajeRespuestaActualizacion respuesta = new MensajeRespuestaActualizacion();
-            //return respuesta.codificaMensaje();
-            return null;
+            String[] nombresEmpresas = new String[bolsa.size()];
+            Double[] valoresAcciones = new Double[bolsa.size()];
+            int i = 0;
+            for (Empresa valor : bolsa.values()){
+                nombresEmpresas[i] = valor.getNombre();
+                valoresAcciones[i] = valor.getValor();
+            }
+            MensajeRespuestaActualizacion respuesta = new MensajeRespuestaActualizacion(Integer.parseInt(datos[0]),
+                    nombresEmpresas,valoresAcciones);
+            return respuesta.codificaMensaje();
         }
     }
 }

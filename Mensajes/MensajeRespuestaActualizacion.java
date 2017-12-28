@@ -1,34 +1,35 @@
 
 package Mensajes;
-import java.util.ArrayList;
-import java.time.Instant;
 public class MensajeRespuestaActualizacion extends MensajeActualizacion{
-    private boolean resultadoOp;
-    private double precioAccionActual;
-    private ArrayList<String> nombresEmpresas;
-    private ArrayList<Double> valoresAcciones;
+    private String[] nombresEmpresas;
+    private Double[] valoresAcciones;
     
-    public MensajeRespuestaActualizacion(String Cliente, boolean resultado,double precioAccionActual){
-        super();
-        cliente=Cliente;
-        resultadoOp=resultado;
-        this.precioAccionActual=precioAccionActual;
+    public MensajeRespuestaActualizacion(int ID, String[] NombresEmpresas, Double[] ValoresAcciones){
+        identificador=ID;
+        nombresEmpresas= new String[NombresEmpresas.length];
+        System.arraycopy(NombresEmpresas,0,nombresEmpresas,0,nombresEmpresas.length);
+        valoresAcciones= new Double[ValoresAcciones.length];
+        System.arraycopy(ValoresAcciones,0,valoresAcciones,0,valoresAcciones.length);
+    }
 
+    public String[] getNombresEmpresas() {
+        String copia[] = new String[this.nombresEmpresas.length];
+        System.arraycopy(this.nombresEmpresas,0,copia,0,copia.length);
+        return copia;
     }
-    public String[] nombreEmpresasToArray(){
-        return (String[])nombresEmpresas.toArray();
+
+    public Double[] getValoresAcciones() {
+        Double copia[] = new Double[this.valoresAcciones.length];
+        System.arraycopy(this.valoresAcciones,0,copia,0,copia.length);
+        return copia;
     }
-    public Double[] valoresAccionesToArray(){
-        return (Double[]) valoresAcciones.toArray();
-    }
+
     public String codificaMensaje(){
-       String mensaje;
-       Instant fecha = Instant.now();
-       mensaje=String.valueOf(this.getIdentificador());
-        for(int i=0;i<nombreEmpresasToArray().length;i++){
-           mensaje+="|"+nombresEmpresas[i]+"|"+valoresAcciones[i]; // si alguien lo sabe corregir...
-       }
-       mensaje+="|"+ fecha;
-               return mensaje;
-}
+        String mensaje = identificador + "|";
+        StringBuilder sb = new StringBuilder();
+        for (int i =0;i<=nombresEmpresas.length;i++){
+            mensaje = sb.append(nombresEmpresas[i]).append("|").append(valoresAcciones[i]).append("|").toString();
+        }
+        return mensaje;
+    }
 }

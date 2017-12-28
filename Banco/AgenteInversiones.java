@@ -37,25 +37,40 @@ public class AgenteInversiones extends Persona {
                     System.out.println("Número de acciones a vender: " + ((MensajeVenta) actual).getNumAcc());
                 }
                 else {
-                    //WIP actualizacion
+                    System.out.println("Actualización: ");
+                    System.out.println("Fecha de solicitud: " + ((MensajeActualizacion) actual).getFecha());
                 }
             }
         }
     }
-    public void EjecutarOperaciones(BolsaDeValores bolsa,BancoDeInversores banco){ //WIP
+    public void EjecutarOperaciones(BolsaDeValores bolsa,BancoDeInversores banco){
         for (Mensaje actual : operacionesPendientes) {
             String respuestaCodificado = bolsa.intentaOperacion(actual.codificaMensaje());
             String[] datos = Mensaje.parser(respuestaCodificado);
             if (actual instanceof MensajeCompra) {
-                resultadoDeOperaciones.add(new MensajeRespuestaCompra(datos[1], datos[2], Boolean.parseBoolean(datos[3]),
-                        Integer.parseInt(datos[4]), Double.parseDouble(datos[5]), Double.parseDouble(datos[6])));
+                resultadoDeOperaciones.add(new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1], datos[2],
+                        Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
+                        Double.parseDouble(datos[6])));
             } else if (actual instanceof MensajeVenta) {
-                resultadoDeOperaciones.add(new MensajeRespuestaVenta(datos[1], datos[2], Boolean.parseBoolean(datos[3]),
-                        Integer.parseInt(datos[4]), Double.parseDouble(datos[5]), Double.parseDouble(datos[6])));
+                resultadoDeOperaciones.add(new MensajeRespuestaVenta(Integer.parseInt(datos[0]),datos[1], datos[2],
+                        Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
+                        Double.parseDouble(datos[6])));
             } else {
-                //resultadoDeOperaciones.add(new MensajeRespuestaActualizacion());
+                int tamanioArrays = datos.length/2 -1;
+                String[] copiaNombresEmpresas = new String[tamanioArrays];
+                Double[] copiaValoresAcciones = new Double[tamanioArrays];
+                int j = 1;
+                for (int i = 1; i<=datos.length; i++){
+                    copiaNombresEmpresas[i-j]=datos[i];
+                    i++;
+                    j++;
+                    copiaValoresAcciones[i-j]=Double.parseDouble(datos[i]);
+                }
+                resultadoDeOperaciones.add(new MensajeRespuestaActualizacion(Integer.parseInt(datos[0]),
+                        copiaNombresEmpresas,copiaValoresAcciones));
             }
         }
+
         for (Mensaje actual: resultadoDeOperaciones){ //Resolución de operaciones
             if (actual instanceof MensajeRespuestaCompra) {
                 MensajeRespuestaCompra actualCast = (MensajeRespuestaCompra) actual;
@@ -63,6 +78,7 @@ public class AgenteInversiones extends Persona {
                     if (actualCast.isResultadoOp())
                         banco.ComprarAccion(actualCast.getCliente(), actualCast.getEmpresa(),
                                 actualCast.getAccionesCompradas(), actualCast.getPrecioAccion(), actualCast.getCantidadRestante());
+
                 }
                 catch (ExcepcionClientes ex){
                     System.out.println(ex.getMessage());
@@ -80,7 +96,7 @@ public class AgenteInversiones extends Persona {
             }
             else{
                 MensajeRespuestaActualizacion actualCast = (MensajeRespuestaActualizacion) actual;
-                banco.ActualizarClientes(actualCast.nombreEmpresasToArray(),actualCast.valoresAccionesToArray());
+                banco.ActualizarClientes(actualCast.getNombresEmpresas(),actualCast.getValoresAcciones());
             }
         }
         System.out.println("Operaciones ejecutadas.");

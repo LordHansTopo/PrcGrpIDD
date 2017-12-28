@@ -4,6 +4,7 @@ import Bolsa.BolsaDeValores;
 import Excepciones.*;
 import General.Escaner;
 import General.Utilidades;
+import Mensajes.MensajeActualizacion;
 import Mensajes.MensajeCompra;
 import Mensajes.MensajeVenta;
 
@@ -315,6 +316,11 @@ public class BancoDeInversores implements Serializable{
         catch (ExcepcionNoNulo ex){
             System.out.println("Error: no se puede comprar este número de acciones.");
         }
+    }
+    public void ActualizarValoresBanco(BolsaDeValores bolsa, AgenteInversiones agente){
+        MensajeActualizacion operacionActualizacion = new MensajeActualizacion();
+        agente.guardarOperacion(operacionActualizacion);
+        System.out.println("Petición almacenada en la lista de peticiones del bróker.");
     }
     //endregion
 }
