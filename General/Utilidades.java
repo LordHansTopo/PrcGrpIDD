@@ -16,11 +16,7 @@ public class Utilidades {
 
     public static int GenerarIntAleat(int LimiteInf,int LimiteSup){
         Random r = new Random();
-        return LimiteInf + (LimiteSup-LimiteInf)*r.nextInt();
-    }
-    public static int GenerarIntAleat(int LimiteSup){
-        Random r = new Random();
-        return LimiteSup*r.nextInt();
+        return Integer.max(r.nextInt(LimiteSup)+LimiteInf,r.nextInt(LimiteSup));
     }
     public static boolean validarDNI(String DNI) {
         boolean correcto = false;

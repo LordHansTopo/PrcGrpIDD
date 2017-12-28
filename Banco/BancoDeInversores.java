@@ -317,7 +317,7 @@ public class BancoDeInversores implements Serializable{
             System.out.println("Error: no se puede comprar este número de acciones.");
         }
     }
-    public void ActualizarValoresBanco(BolsaDeValores bolsa, AgenteInversiones agente){
+    public void ActualizarValoresBanco(AgenteInversiones agente){
         MensajeActualizacion operacionActualizacion = new MensajeActualizacion();
         agente.guardarOperacion(operacionActualizacion);
         System.out.println("Petición almacenada en la lista de peticiones del bróker.");

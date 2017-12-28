@@ -7,7 +7,7 @@ abstract public class Mensaje {
     protected int identificador;
 
     public Mensaje(){ //Genera identificador (Debatir si es la forma correcta de generar uno)
-        identificador=Utilidades.GenerarIntAleat(100000);
+        identificador=Utilidades.GenerarIntAleat(0,10000);
     }
 
     public int getIdentificador() {
@@ -16,6 +16,6 @@ abstract public class Mensaje {
 
     abstract public String codificaMensaje();
     public static String[] parser(String mensajeCodificado){
-        return mensajeCodificado.split("|");
+        return mensajeCodificado.split("[|]");
     }
 }

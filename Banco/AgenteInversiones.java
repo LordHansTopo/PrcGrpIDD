@@ -38,6 +38,7 @@ public class AgenteInversiones extends Persona {
                 }
                 else {
                     System.out.println("Actualización: ");
+                    System.out.println("Identificador: " + actual.getIdentificador());
                     System.out.println("Fecha de solicitud: " + ((MensajeActualizacion) actual).getFecha());
                 }
             }
@@ -56,11 +57,11 @@ public class AgenteInversiones extends Persona {
                         Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
                         Double.parseDouble(datos[6])));
             } else {
-                int tamanioArrays = datos.length/2 -1;
+                int tamanioArrays = datos.length/2;
                 String[] copiaNombresEmpresas = new String[tamanioArrays];
                 Double[] copiaValoresAcciones = new Double[tamanioArrays];
                 int j = 1;
-                for (int i = 1; i<=datos.length; i++){
+                for (int i = 1; i<datos.length; i++){
                     copiaNombresEmpresas[i-j]=datos[i];
                     i++;
                     j++;
