@@ -11,8 +11,7 @@ public class MensajeVenta extends Mensaje{
       this.empresa=Empresa;
       this.numAcc=numAcc;
     }
-
-    public String getCliente() {
+     public String getCliente() {
         return cliente;
     }
 
@@ -23,11 +22,10 @@ public class MensajeVenta extends Mensaje{
     public int getNumAcc() {
         return numAcc;
     }
-
+    
     public String codificaMensaje(){
        
         return this.getIdentificador() +"|"+ cliente +"|"+ empresa +"|"+ numAcc;
-
     }
 
 }
