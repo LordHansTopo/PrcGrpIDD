@@ -26,9 +26,9 @@ public class MensajeRespuestaActualizacion extends MensajeActualizacion{
        Instant fecha = Instant.now();
        mensaje=String.valueOf(this.getIdentificador());
         for(int i=0;i<nombreEmpresasToArray().length;i++){
-           mensaje="|"+nombresEmpresas[i]+"|"+valoresAcciones[i]; //si alguno lo sabe corregir...
+           mensaje+="|"+nombresEmpresas[i]+"|"+valoresAcciones[i]; // si alguien lo sabe corregir...
        }
-       mensaje="|"+ fecha;
+       mensaje+="|"+ fecha;
                return mensaje;
 }
 }
