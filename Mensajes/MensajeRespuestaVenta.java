@@ -32,7 +32,7 @@ public class MensajeRespuestaVenta extends MensajeCompra{
     }
 
     public String codificaMensaje(){
-        return identificador + "|" + cliente + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion
+        return identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion
                 + "|" + gananciasTotales;
     }
 

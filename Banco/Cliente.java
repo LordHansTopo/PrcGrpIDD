@@ -89,5 +89,8 @@ public class Cliente extends Persona {
         }
     }
 
+    public boolean suficientesAcciones(String empresa, int numAcciones){
+        return (this.paqueteDelCliente.get(empresa).getNumeroTitulos()>=numAcciones);
+    }
     //Endregion
 }

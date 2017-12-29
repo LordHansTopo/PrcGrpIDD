@@ -4,14 +4,18 @@ import Bolsa.BolsaDeValores;
 import Excepciones.ExcepcionClientes;
 import Excepciones.ExcepcionPaquetes;
 import Mensajes.*;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AgenteInversiones extends Persona {
 
+    private BolsaDeValores bolsaDeValores;
     private ArrayList<Mensaje> operacionesPendientes,resultadoDeOperaciones;
 
-    public AgenteInversiones(String nombre, String DNI){
+    public AgenteInversiones(String nombre, String DNI, BolsaDeValores bolsa){
         super(nombre, DNI);
+        bolsaDeValores = bolsa;
         operacionesPendientes = new ArrayList<Mensaje>();
         resultadoDeOperaciones = new ArrayList<Mensaje>();
     }
@@ -21,42 +25,72 @@ public class AgenteInversiones extends Persona {
     public void ImprimirOperaciones(){
         if (operacionesPendientes.isEmpty()){System.out.println("No hay peticiones almacenadas.");}
         else {
+            DecimalFormat formateadorValores = new DecimalFormat("0.00");
             for (Mensaje actual : operacionesPendientes) {
                 if (actual instanceof MensajeCompra){
                     System.out.println("Compra:");
                     System.out.println("Identificador: " + actual.getIdentificador());
                     System.out.println("Cliente: " + ((MensajeCompra) actual).getCliente());
                     System.out.println("Empresa: " + ((MensajeCompra) actual).getEmpresa());
-                    System.out.println("Cantidad a invertir: " + ((MensajeCompra) actual).getCantidadMax() + "\n");
+                    System.out.println("Cantidad a invertir: " + formateadorValores.format(((MensajeCompra) actual).getCantidadMax()) + " €\n");
                 }
                 else if (actual instanceof MensajeVenta){
                     System.out.println("Venta:");
                     System.out.println("Identificador: " + actual.getIdentificador());
                     System.out.println("Cliente: " + ((MensajeVenta) actual).getCliente());
                     System.out.println("Empresa: " + ((MensajeVenta) actual).getEmpresa());
-                    System.out.println("Número de acciones a vender: " + ((MensajeVenta) actual).getNumAcc());
+                    System.out.println("Número de acciones a vender: " + ((MensajeVenta) actual).getNumAcc() + " €\n");
                 }
                 else {
                     System.out.println("Actualización: ");
                     System.out.println("Identificador: " + actual.getIdentificador());
-                    System.out.println("Fecha de solicitud: " + ((MensajeActualizacion) actual).getFecha());
+                    System.out.println("Fecha de solicitud: " + ((MensajeActualizacion) actual).getFecha() + "\n");
                 }
             }
         }
     }
-    public void EjecutarOperaciones(BolsaDeValores bolsa,BancoDeInversores banco){
+    public void EjecutarOperaciones(BancoDeInversores banco){
         for (Mensaje actual : operacionesPendientes) {
-            String respuestaCodificado = bolsa.intentaOperacion(actual.codificaMensaje());
+            String respuestaCodificado = bolsaDeValores.intentaOperacion(actual.codificaMensaje());
             String[] datos = Mensaje.parser(respuestaCodificado);
             if (actual instanceof MensajeCompra) {
+                //[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|250(precioAcc)|50(dinero restante)]
+                try{
+                    if (Boolean.parseBoolean(datos[3])) banco.ComprarAccion(datos[1], datos[2],Integer.parseInt(datos[4]),
+                        Double.parseDouble(datos[5]),Double.parseDouble(datos[6]));
+                }
+                catch (ExcepcionClientes ex){
+                    System.out.println(ex.getMessage());
+                }
                 resultadoDeOperaciones.add(new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1], datos[2],
                         Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
                         Double.parseDouble(datos[6])));
+                System.out.println("Compra realizada. Datos:");
+                System.out.println("Cliente: " + datos[1]);
+                System.out.println("Empresa: " + datos[2]);
+                System.out.println("Número de acciones compradas: " + datos[4]);
+                System.out.println("Precio de cada acción: " + datos[5] + " €");
+                System.out.println("Cantidad sobrante: " + datos[6] + " €\n");
             } else if (actual instanceof MensajeVenta) {
+                //[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|500(gananciaTotal)]
+                try {
+                    if (Boolean.parseBoolean(datos[3])) banco.VenderAccion(datos[1],datos[2],Integer.parseInt(datos[4]),
+                            Double.parseDouble(datos[5]));
+                    System.out.println("Venta realizada. Datos:");
+                    System.out.println("Cliente: " + datos[1]);
+                    System.out.println("Empresa: " + datos[2]);
+                    System.out.println("Número de acciones vendidas: " + datos[4]);
+                    System.out.println("Precio de cada acción: " + datos[5] + "€");
+                    System.out.println("Ganancia total: " + datos[6] + " €\n");
+                }
+                catch (ExcepcionPaquetes ex){
+                    System.out.println(ex.getMessage());
+                }
                 resultadoDeOperaciones.add(new MensajeRespuestaVenta(Integer.parseInt(datos[0]),datos[1], datos[2],
                         Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
                         Double.parseDouble(datos[6])));
             } else {
+                //ID|Empresa1|PrecioAccion1|...|...|EmpresaN|PrecioAccionN
                 int tamanioArrays = datos.length/2;
                 String[] copiaNombresEmpresas = new String[tamanioArrays];
                 Double[] copiaValoresAcciones = new Double[tamanioArrays];
@@ -67,39 +101,12 @@ public class AgenteInversiones extends Persona {
                     j++;
                     copiaValoresAcciones[i-j]=Double.parseDouble(datos[i]);
                 }
+                banco.ActualizarClientes(copiaNombresEmpresas,copiaValoresAcciones);
                 resultadoDeOperaciones.add(new MensajeRespuestaActualizacion(Integer.parseInt(datos[0]),
                         copiaNombresEmpresas,copiaValoresAcciones));
+                System.out.println("Actualización completada.\n");
             }
         }
-
-        for (Mensaje actual: resultadoDeOperaciones){ //Resolución de operaciones
-            if (actual instanceof MensajeRespuestaCompra) {
-                MensajeRespuestaCompra actualCast = (MensajeRespuestaCompra) actual;
-                try {
-                    if (actualCast.isResultadoOp())
-                        banco.ComprarAccion(actualCast.getCliente(), actualCast.getEmpresa(),
-                                actualCast.getAccionesCompradas(), actualCast.getPrecioAccion(), actualCast.getCantidadRestante());
-
-                }
-                catch (ExcepcionClientes ex){
-                    System.out.println(ex.getMessage());
-                }
-            }
-            else if (actual instanceof MensajeRespuestaVenta){
-                try {
-                    MensajeRespuestaVenta actualCast = (MensajeRespuestaVenta) actual;
-                    if (actualCast.isResultadoOp()) banco.VenderAccion(actualCast.getCliente(), actualCast.getEmpresa(),
-                            actualCast.getAccionesVendidas(), actualCast.getGananciasTotales());
-                }
-                catch (ExcepcionPaquetes ex){
-                    System.out.println(ex.getMessage());
-                }
-            }
-            else{
-                MensajeRespuestaActualizacion actualCast = (MensajeRespuestaActualizacion) actual;
-                banco.ActualizarClientes(actualCast.getNombresEmpresas(),actualCast.getValoresAcciones());
-            }
-        }
-        System.out.println("Operaciones ejecutadas.");
+        operacionesPendientes.clear();
     }
 }
