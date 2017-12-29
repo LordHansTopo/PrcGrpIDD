@@ -25,33 +25,15 @@ public class BancoDeInversores implements Serializable{
 
     //endregion
     //region Constructor
-    public BancoDeInversores(String nombre){
-        setNombre(nombre);
-        setAgenteInversiones(getAgenteInversiones()); //revisar
+    public BancoDeInversores(String nombre,AgenteInversiones agente){
+        this.nombre = nombre;
+        agenteInversiones = agente;
         gestores = new ArrayList<GestorDeInversiones>();
         clientes = new HashMap<String, Cliente>();
         clientesPremium = new HashMap<String, ClientePremium>();
     }
     //endregion
-    //region Getters y Setters
-    public void setAgenteInversiones(AgenteInversiones agenteInversiones) {
-        this.agenteInversiones = agenteInversiones;
-    }
 
-    public AgenteInversiones getAgenteInversiones() {
-        return agenteInversiones;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-
-    //endregion
     //region Otros metodos
     public void insertarCliente(){
         System.out.println("Introduzca DNI del cliente");
@@ -265,7 +247,7 @@ public class BancoDeInversores implements Serializable{
         }
         this.clientes = newCliente;
     }
-    public void ComprarAcciones(BolsaDeValores bolsa,AgenteInversiones agente){
+    public void ComprarAcciones(BolsaDeValores bolsa){
         try {
             Escaner escaner = new Escaner();
             System.out.println("Introduzca el DNI del cliente: ");
@@ -281,7 +263,7 @@ public class BancoDeInversores implements Serializable{
             if (clientes.get(DNI).getSaldo()<cantidadMax) throw new ExcepcionSaldoInsuficiente();
 
             MensajeCompra operacionCompra = new MensajeCompra(DNI, empresa, cantidadMax);
-            agente.guardarOperacion(operacionCompra);
+            agenteInversiones.guardarOperacion(operacionCompra);
             System.out.println("Petición almacenada en la lista de peticiones del bróker.");
         }
         catch (ExcepcionNoExisteValor e){
@@ -291,7 +273,7 @@ public class BancoDeInversores implements Serializable{
             System.out.println("El cliente no tiene dinero suficiente para realizar esta operación.");
         }
     }
-    public void VenderAcciones(BolsaDeValores bolsa, AgenteInversiones agente){ //WIP
+    public void VenderAcciones(BolsaDeValores bolsa){
         try{
             Escaner escaner = new Escaner();
             System.out.println("Introduzca el DNI del cliente: ");
@@ -305,9 +287,10 @@ public class BancoDeInversores implements Serializable{
             System.out.println("Introduzca el número de acciones a vender: ");
             int acciones = escaner.leerInt();
             if (acciones<=0) throw new ExcepcionNoNulo();
+            if (!clientes.get(DNI).suficientesAcciones(empresa,acciones)) throw new ExcepcionPaquetes();
 
             MensajeVenta operacionVenta = new MensajeVenta(DNI,empresa,acciones);
-            agente.guardarOperacion(operacionVenta);
+            agenteInversiones.guardarOperacion(operacionVenta);
             System.out.println("Petición almacenada en la lista de peticiones del bróker.");
         }
         catch (ExcepcionNoExisteValor ex){
@@ -316,10 +299,13 @@ public class BancoDeInversores implements Serializable{
         catch (ExcepcionNoNulo ex){
             System.out.println("Error: no se puede comprar este número de acciones.");
         }
+        catch (ExcepcionPaquetes ex){
+            System.out.println("Error: El cliente no tiene suficientes acciones.");
+        }
     }
-    public void ActualizarValoresBanco(AgenteInversiones agente){
+    public void ActualizarValoresBanco(){
         MensajeActualizacion operacionActualizacion = new MensajeActualizacion();
-        agente.guardarOperacion(operacionActualizacion);
+        agenteInversiones.guardarOperacion(operacionActualizacion);
         System.out.println("Petición almacenada en la lista de peticiones del bróker.");
     }
     //endregion
