@@ -64,16 +64,17 @@ public class BolsaDeValores implements Serializable{
         System.out.println("Valor de acciones de todas las empresas actualizados.");
     }
     public void GuardarCopia(String path){
-        try(FileOutputStream file = new FileOutputStream(path)){
-            ObjectOutputStream output = new ObjectOutputStream(file);
-            output.writeObject(this.bolsa);
-            System.out.println("Copia guardada con éxito en " + path);
-        }
-        catch(FileNotFoundException fnfex){
-            System.out.println("Error: No se puede escribir el fichero en disco. (FileNotFoundException)");
-        }
-        catch(IOException ioex){
-            System.out.println("Error de E/S. (IOException)");
+        if (bolsa.isEmpty()) System.out.println("El banco está vacío. No se guardará copia de seguridad");
+        else {
+            try (FileOutputStream file = new FileOutputStream(path);
+                 ObjectOutputStream output = new ObjectOutputStream(file)) {
+                output.writeObject(this.bolsa);
+                System.out.println("Copia guardada con éxito en " + path);
+            } catch (FileNotFoundException fnfex) {
+                System.out.println("Error: No se puede escribir el fichero en disco. (FileNotFoundException)");
+            } catch (IOException ioex) {
+                System.out.println("Error de E/S. (IOException)");
+            }
         }
     }
     public void CargarCopia(String path){

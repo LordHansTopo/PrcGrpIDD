@@ -1,5 +1,8 @@
 package Banco;
-public class PaqueteDeAcciones{
+
+import java.io.Serializable;
+
+public class PaqueteDeAcciones implements Serializable{
     //region Atributos
     private String nombreEmpresa;
     private int numeroTitulos;
