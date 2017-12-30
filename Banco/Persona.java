@@ -1,6 +1,8 @@
 package Banco;
 
-public class Persona {
+import java.io.Serializable;
+
+public class Persona implements Serializable{
     //Atributos
     private String nombre;
     private String DNI;

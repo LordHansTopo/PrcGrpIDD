@@ -55,13 +55,8 @@ public class AgenteInversiones extends Persona {
             String[] datos = Mensaje.parser(respuestaCodificado);
             if (actual instanceof MensajeCompra) {
                 //[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|250(precioAcc)|50(dinero restante)]
-                try{
-                    if (Boolean.parseBoolean(datos[3])) banco.ComprarAccion(datos[1], datos[2],Integer.parseInt(datos[4]),
-                        Double.parseDouble(datos[5]),Double.parseDouble(datos[6]));
-                }
-                catch (ExcepcionClientes ex){
-                    System.out.println(ex.getMessage());
-                }
+                if (Boolean.parseBoolean(datos[3])) banco.ComprarAccion(datos[1], datos[2],Integer.parseInt(datos[4]),
+                        Double.parseDouble(datos[5]));
                 resultadoDeOperaciones.add(new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1], datos[2],
                         Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
                         Double.parseDouble(datos[6])));
@@ -73,19 +68,14 @@ public class AgenteInversiones extends Persona {
                 System.out.println("Cantidad sobrante: " + datos[6] + " €\n");
             } else if (actual instanceof MensajeVenta) {
                 //[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|500(gananciaTotal)]
-                try {
-                    if (Boolean.parseBoolean(datos[3])) banco.VenderAccion(datos[1],datos[2],Integer.parseInt(datos[4]),
-                            Double.parseDouble(datos[5]));
-                    System.out.println("Venta realizada. Datos:");
-                    System.out.println("Cliente: " + datos[1]);
-                    System.out.println("Empresa: " + datos[2]);
-                    System.out.println("Número de acciones vendidas: " + datos[4]);
-                    System.out.println("Precio de cada acción: " + datos[5] + "€");
-                    System.out.println("Ganancia total: " + datos[6] + " €\n");
-                }
-                catch (ExcepcionPaquetes ex){
-                    System.out.println(ex.getMessage());
-                }
+                if (Boolean.parseBoolean(datos[3])) banco.VenderAccion(datos[1],datos[2],Integer.parseInt(datos[4]));
+                System.out.println("Venta realizada. Datos:");
+                System.out.println("Cliente: " + datos[1]);
+                System.out.println("Empresa: " + datos[2]);
+                System.out.println("Número de acciones vendidas: " + datos[4]);
+                System.out.println("Precio de cada acción: " + datos[5] + "€");
+                System.out.println("Ganancia total: " + datos[6] + " €\n");
+
                 resultadoDeOperaciones.add(new MensajeRespuestaVenta(Integer.parseInt(datos[0]),datos[1], datos[2],
                         Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
                         Double.parseDouble(datos[6])));

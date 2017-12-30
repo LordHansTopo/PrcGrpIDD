@@ -1,5 +1,7 @@
 package General;
 
+import Excepciones.ExcepcionNoNulo;
+
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -40,9 +42,15 @@ public class Escaner {
     public String leerString(){
         while (true) {
             try{
-                return input.nextLine();
+                String leido = input.nextLine();
+                if(leido.isEmpty()) throw new ExcepcionNoNulo();
+                else return leido;
             } catch (NoSuchElementException ex){
                 System.out.println("Error: Valor introducido inválido, intenta de nuevo:");
+                input.next();
+            }
+            catch (ExcepcionNoNulo ex){
+                System.out.println("Error: No se ha introducido valor, intenta de nuevo:");
                 input.next();
             }
         }
