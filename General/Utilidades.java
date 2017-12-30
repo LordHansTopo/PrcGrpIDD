@@ -18,11 +18,11 @@ public class Utilidades {
         Random r = new Random();
         return Integer.max(r.nextInt(LimiteSup)+LimiteInf,r.nextInt(LimiteSup));
     }
-    public static boolean validarDNI(String DNI) {
+    public static boolean validarDNI(String DNI) { //funcion validadora de DNI
         boolean correcto = false;
-        Pattern pattern = Pattern.compile("(\\d{1,8})([TRWAGMYFPDXBNJZSQVHLCKEtrwagmyfpdxbnjzsqvhlcke])");
+        Pattern pattern = Pattern.compile("(\\d{1,8})([TRWAGMYFPDXBNJZSQVHLCKEtrwagmyfpdxbnjzsqvhlcke])"); //comprueba si sigue el patron de 8 numeros seguido de una letra
         Matcher matcher = pattern.matcher(DNI);
-        if (matcher.matches()) {
+        if (matcher.matches()) { //si sigue el patron, entonces comprueba si el numero modulo 23 genera la letra apropiada
             String letraDNI = matcher.group(2);
             String letras = "TRWAGMYFPDXBNJZSQVHLCKE";
             int index = Integer.parseInt(matcher.group(1));

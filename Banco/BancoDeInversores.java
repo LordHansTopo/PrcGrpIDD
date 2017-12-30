@@ -8,11 +8,8 @@ import Mensajes.MensajeActualizacion;
 import Mensajes.MensajeCompra;
 import Mensajes.MensajeVenta;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 import java.io.*;
-import java.util.Map;
 
 
 public class BancoDeInversores implements Serializable{
@@ -34,10 +31,12 @@ public class BancoDeInversores implements Serializable{
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
         Boolean validar = Utilidades.validarDNI(DNI);
+        //comprobador de DNI valido
         try {
             if (validar) {
                 try {
                     if (!this.clientes.containsKey(DNI)) {
+                        //si el cliente es nuevo se pide la introduccion de datos
                         System.out.println("Introduzca nombre del cliente");
                         String nombre = escaner.leerString();
                         System.out.println("Introduzca el saldo inicial del cliente");
@@ -86,9 +85,12 @@ public class BancoDeInversores implements Serializable{
     }
 
     public void imprimirClientes(){
-        if (clientes.isEmpty()) System.out.println("No hay clientes registrados.");
+        if (clientes.isEmpty()){
+            System.out.println("No hay clientes registrados.");
+        }
         else {
             for (Map.Entry<String, Cliente> cliente : clientes.entrySet()) {
+                //bucle que en cada cliente imprime su informacion
                 System.out.println("DNI: " + cliente.getKey());
                 System.out.println("Nombre: " + cliente.getValue().getNombre());
                 System.out.println("Saldo: " + cliente.getValue().getSaldo() + " €");
@@ -130,7 +132,7 @@ public class BancoDeInversores implements Serializable{
                             nombreGestor = escaner.leerString();
                         }
                         ClientePremium clientePremium = new ClientePremium(clientes.get(DNI), new GestorDeInversiones(DNIGestor,nombreGestor));
-                        clientes.put(DNI,clientePremium); //Se sustituye si existe, no hace falta eliminar antes
+                        clientes.put(DNI,clientePremium); //se sustituye si existe, no hace falta eliminar antes
                     } else throw new ExcepcionClienteNoPerteneceBanco("Este cliente no pertenece al banco.");
                 }
                 catch (ExcepcionClienteNoPerteneceBanco ex) {
@@ -146,7 +148,7 @@ public class BancoDeInversores implements Serializable{
     public void guardarCopiaSeguridad(String path){
         if (clientes.isEmpty()) System.out.println("El banco está vacío. No se guardará copia de seguridad");
         else {
-            try (FileOutputStream file = new FileOutputStream(path);
+            try(FileOutputStream file = new FileOutputStream(path);
                  ObjectOutputStream output = new ObjectOutputStream(file);) {
                 output.writeObject(clientes);
                 System.out.println("Copia guardada con éxito en " + path);
@@ -184,7 +186,7 @@ public class BancoDeInversores implements Serializable{
     public void ComprarAccion (String DNI,String Empresa, int numAcciones, double precioAccion){
         try{
             if(this.clientes.containsKey(DNI)){
-                this.clientes.get(DNI).compraPaquete(Empresa, numAcciones, precioAccion);
+                this.clientes.get(DNI).compraPaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la compra de las acciones
             } else {
                 throw new ExcepcionClientes("Cliente no existe");
             }
@@ -194,10 +196,10 @@ public class BancoDeInversores implements Serializable{
 
     }
 
-    public void VenderAccion (String DNI, String Empresa, int numAcciones){
+    public void VenderAccion (String DNI, String Empresa, int numAcciones, double precioAccion){
         try {
             if (this.clientes.containsKey(DNI)) {
-                this.clientes.get(DNI).vendePaquete(Empresa, numAcciones);
+                this.clientes.get(DNI).vendePaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la venta de las acciones
             } else {
                 throw new ExcepcionClientes("Cliente no existe");
             }
@@ -206,22 +208,14 @@ public class BancoDeInversores implements Serializable{
         }
     }
 
-    public void ActualizarClientes(String[] empresas, Double[] precios){ //Arreglar
-        int sizeC = this.clientes.size();
-        Collection<Cliente> collectionClientes = this.clientes.values();
-        Cliente[] arrayClientes = (Cliente[]) collectionClientes.toArray();
-        int sizeE = empresas.length;
-        for (int i=0; i< sizeC; i++){
-            for (int j=0; j < sizeE; j++){
-                arrayClientes[i].actualizarPaquete(empresas[j], precios[j]);
+    public void ActualizarClientes(String[] empresas, Double[] precios){ //actualiza en cada cliente todas sus acciones
+        for (Map.Entry<String,Cliente> cliente : clientes.entrySet()){
+            for (int i=0; i < empresas.length; i++){
+                cliente.getValue().actualizarPaquete(empresas[i], precios[i]);
             }
         }
-        HashMap<String, Cliente> newCliente = new HashMap<String, Cliente>();
-        for (int k=0; k < sizeC; k++){
-            newCliente.put(arrayClientes[k].getDNI(), arrayClientes[k]);
-        }
-        this.clientes = newCliente;
     }
+
     public void ComprarAcciones(BolsaDeValores bolsa){ // Manda mensaje de compra al broker
         try {
             Escaner escaner = new Escaner();
@@ -248,6 +242,7 @@ public class BancoDeInversores implements Serializable{
             System.out.println("El cliente no tiene dinero suficiente para realizar esta operación.");
         }
     }
+
     public void VenderAcciones(BolsaDeValores bolsa){ // Manda mensaje de venta al broker
         try{
             Escaner escaner = new Escaner();
@@ -278,6 +273,7 @@ public class BancoDeInversores implements Serializable{
             System.out.println("Error: El cliente no tiene suficientes acciones.");
         }
     }
+
     public void ActualizarValoresBanco(){ // Manda mensaje de actualizacion al broker
         MensajeActualizacion operacionActualizacion = new MensajeActualizacion();
         agenteInversiones.guardarOperacion(operacionActualizacion);
