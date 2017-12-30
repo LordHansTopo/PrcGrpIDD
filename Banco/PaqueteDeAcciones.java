@@ -78,6 +78,7 @@ public class PaqueteDeAcciones implements Serializable{
     //endregion
     //region Otros metodos
     public void actualizarValores(Double precioActual){
+        //actualiza el precio de 1 accion
         setPrecioIndividual(precioActual);
         setPrecioCompleto();
         setVariacion();
