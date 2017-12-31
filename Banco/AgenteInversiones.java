@@ -68,13 +68,14 @@ public class AgenteInversiones extends Persona {
                 System.out.println("Cantidad sobrante: " + datos[6] + " €\n");
             } else if (actual instanceof MensajeVenta) {
                 //[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|500(gananciaTotal)]
-                if (Boolean.parseBoolean(datos[3])) banco.VenderAccion(datos[1],datos[2],Integer.parseInt(datos[4]));
+                if (Boolean.parseBoolean(datos[3])){
+                    banco.VenderAccion(datos[1],datos[2],Integer.parseInt(datos[4]),Integer.parseInt(datos[5])); //faltaba datos 5 si no no dejaba por tener dimensiones diferentes(?)
                 System.out.println("Venta realizada. Datos:");
                 System.out.println("Cliente: " + datos[1]);
                 System.out.println("Empresa: " + datos[2]);
                 System.out.println("Número de acciones vendidas: " + datos[4]);
                 System.out.println("Precio de cada acción: " + datos[5] + "€");
-                System.out.println("Ganancia total: " + datos[6] + " €\n");
+                System.out.println("Ganancia total: " + datos[6] + " €\n");}
 
                 resultadoDeOperaciones.add(new MensajeRespuestaVenta(Integer.parseInt(datos[0]),datos[1], datos[2],
                         Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
