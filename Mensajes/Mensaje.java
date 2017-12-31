@@ -6,7 +6,7 @@ import General.Utilidades;
 abstract public class Mensaje {
     protected int identificador;
 
-    public Mensaje(){ //Genera identificador (Debatir si es la forma correcta de generar uno)
+    protected Mensaje(){ //Genera identificador (Debatir si es la forma correcta de generar uno)
         identificador=Utilidades.GenerarIntAleat(0,10000);
     }
 

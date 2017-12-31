@@ -9,9 +9,7 @@ import Mensajes.MensajeRespuestaCompra;
 import Mensajes.MensajeRespuestaVenta;
 
 import java.io.*;
-import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class BolsaDeValores implements Serializable{
@@ -20,7 +18,7 @@ public class BolsaDeValores implements Serializable{
     public BolsaDeValores(){
         this.bolsa = new HashMap<String,Empresa>();
     }
-    public void AñadirEmpresa(){
+    public void AniadirEmpresa(){
         Escaner escaner = new Escaner();
         System.out.println("Introduzca el nombre de la empresa a añadir:");
         String nombre = escaner.leerString();
@@ -60,9 +58,14 @@ public class BolsaDeValores implements Serializable{
             System.out.println("La bolsa no contiene empresas.");
         }
     }
-    public void ActualizarValoresBolsa(){
-        bolsa.forEach((k,v) -> v.actualizarValoresEmpresa());
-        System.out.println("Valor de acciones de todas las empresas actualizados.");
+    public void ActualizarValoresBolsa(double valorMin, double valorMax){
+        if (valorMin<valorMax) {
+            bolsa.forEach((k, v) -> v.actualizarValoresEmpresa(Utilidades.GenerarNumAleat(valorMin, valorMax)));
+            System.out.println("Valor de acciones de todas las empresas actualizados.");
+        }
+        else{
+            System.out.println("Valores introducidos inválidos.");
+        }
     }
     public void GuardarCopia(String path){
         if (bolsa.isEmpty()) System.out.println("El banco está vacío. No se guardará copia de seguridad");
@@ -95,6 +98,9 @@ public class BolsaDeValores implements Serializable{
         }
         catch(ClassNotFoundException cnfex){
             System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassNotFoundException)");
+        }
+        catch(ClassCastException csex) {
+            System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassCastException)");
         }
     }
     public boolean existeEmpresa(String nombreEmpresa){ //Usado en el banco de inversiones para controlar excepciones
@@ -132,7 +138,6 @@ public class BolsaDeValores implements Serializable{
             return respuesta.codificaMensaje();
         }
     }
-
 
     public String empresaMayorIncremento(){
         double mayorIncremento = 0.0;

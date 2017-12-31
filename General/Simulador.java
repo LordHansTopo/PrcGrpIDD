@@ -16,8 +16,9 @@ public class Simulador {
         this.interfaz = new InterfazDeUsuario();
         this.bolsaDeValores = new BolsaDeValores();
         this.agenteInversiones = new AgenteInversiones("Marco Polo","123456789A",bolsaDeValores);
-        this.bancoDeInversores = new BancoDeInversores(this.agenteInversiones);
+        this.bancoDeInversores = new BancoDeInversores(this.agenteInversiones,"Banco De Ejemplo");
         bolsaDeValores.CargarCopia("DefectoBolsa.bin"); //Cargar valores por defecto de bolsa
+        bancoDeInversores.cargarCopiaSeguridad("DefectoBanco.bin"); //Cargar valores por defecto del banco
     }
     public void comenzarSimulacion(){
         while(true) {
@@ -48,16 +49,21 @@ public class Simulador {
                     bancoDeInversores.mejorarCliente(bolsaDeValores);
                     break;
                 case 8:
-                    bancoDeInversores.Recomendacion();
+                    bancoDeInversores.Recomendacion(bolsaDeValores);
                     break;
                 case 9:
-                    bolsaDeValores.AñadirEmpresa();
+                    bolsaDeValores.AniadirEmpresa();
                     break;
                 case 10:
                     bolsaDeValores.EliminarEmpresa();
                     break;
                 case 11:
-                    bolsaDeValores.ActualizarValoresBolsa();
+                    Escaner escaner = new Escaner();
+                    System.out.println("Inserte el valor mínimo que deberían tener las acciones:");
+                    double minimo = escaner.leerDouble();
+                    System.out.println("Inserte el valor máximo que deberían tener las acciones:");
+                    double maximo = escaner.leerDouble();
+                    bolsaDeValores.ActualizarValoresBolsa(minimo,maximo);
                     break;
                 case 12:
                     bolsaDeValores.GuardarCopia("CopiaBolsa.bin");

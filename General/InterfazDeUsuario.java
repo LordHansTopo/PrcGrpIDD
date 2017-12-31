@@ -1,26 +1,11 @@
 package General;
 
-import Excepciones.ExcepcionValorMenu;
-
 public class InterfazDeUsuario {
-    Escaner escaner;
+    private Escaner escaner;
     private int opcion;
 
-    public void setEscaner(Escaner escaner) {
-        this.escaner = escaner;
-    }
-
-    public int getOpcion() {
-        return opcion;
-    }
-
-    public void setOpcion(int opcion) {
-        this.opcion = opcion;
-    }
-
     public InterfazDeUsuario() {
-        Escaner escaner = new Escaner();
-        this.setEscaner(escaner);
+        this.escaner = new Escaner();
     }
 
     public int iniciarInterfaz() {
@@ -48,17 +33,14 @@ public class InterfazDeUsuario {
             System.out.println("------------------------- BRÓKER -------------------------");
             System.out.println("[17] - Imprimir operaciones pendientes");
             System.out.println("[18] - Ejecutar operaciones pendientes");
-            this.setOpcion(-1);
-            try {
-                System.out.println("\nIntroduce un valor:");
-                this.setOpcion(escaner.leerInt());
-                if (getOpcion()<0 ||getOpcion()>18){
-                    throw new ExcepcionValorMenu("Error: Valor introducido inválido, intenta de nuevo:");
+            this.opcion=-1;
+            System.out.println("\nIntroduce un valor:");
+            while (opcion<0 || opcion>18){
+                this.opcion=escaner.leerInt();
+                if (opcion<0 || opcion>18){
+                 System.out.println("Error: Valor introducido inválido, intenta de nuevo:");
                 }
             }
-            catch (ExcepcionValorMenu ex){
-                ex.getMessage();
-            }
-            return getOpcion();
+            return opcion;
     }
 }

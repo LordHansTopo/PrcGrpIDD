@@ -18,39 +18,21 @@ public class Empresa implements Serializable{
         return valor;
     }
 
-    public double getValorAnt() {
-        return valorAnt;
-    }
-
     public double getIncremento() {
         return incremento;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public void setValorAnt(double valorAnt) {
-        this.valorAnt = valorAnt;
-    }
-
-    public void setIncremento(double incremento) {
-        this.incremento = incremento;
-    }
-
     public Empresa(String nombre){
-        this.setNombre(nombre);
-        this.setValor(Utilidades.GenerarNumAleat(5000));
-        this.setValorAnt(0);
-        this.setIncremento(0);
+        this.nombre=nombre;
+        this.valor= Utilidades.GenerarNumAleat(30000);
+        this.valorAnt=0;
+        this.incremento=valor;
     }
     public boolean equals(Object o1){ //Dos empresas son iguales si tienen el mismo nombre
-        return (this.nombre.equals(((Empresa)o1).getNombre()));
+        if (o1.getClass() != this.getClass()) return false;
+        else return (this.nombre.equals(((Empresa)o1).getNombre()));
     }
+
     public void imprimirInfo(){
         System.out.println("Nombre: " + nombre);
         DecimalFormat formateadorValores = new DecimalFormat("0.00");
@@ -58,9 +40,9 @@ public class Empresa implements Serializable{
         System.out.println("Valor anterior de acción: " + formateadorValores.format(valorAnt)+ "€" );
         System.out.println("Incremento: " + formateadorValores.format(incremento) + "€" + "\n");
     }
-    public void actualizarValoresEmpresa(){
+    public void actualizarValoresEmpresa(double nuevoValor){
         valorAnt=valor;
-        valor=Utilidades.GenerarNumAleat(20000);
+        valor=nuevoValor;
         incremento=valor-valorAnt;
     }
 }
