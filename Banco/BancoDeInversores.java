@@ -1,6 +1,7 @@
 package Banco;
 
 import Bolsa.BolsaDeValores;
+import Bolsa.Empresa;
 import Excepciones.*;
 import General.Escaner;
 import General.Utilidades;
@@ -30,8 +31,7 @@ public class BancoDeInversores implements Serializable{
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
-        Boolean validar = Utilidades.validarDNI(DNI);
-        //comprobador de DNI valido
+        Boolean validar = Utilidades.validarDNI(DNI); //comprobador de DNI valido
         try {
             if (validar) {
                 try {
@@ -104,7 +104,7 @@ public class BancoDeInversores implements Serializable{
         }
     }
 
-    public void mejorarCliente() {
+    public void mejorarCliente(BolsaDeValores bolsa) {
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
         String DNI = escaner.leerString();
@@ -131,7 +131,7 @@ public class BancoDeInversores implements Serializable{
                             System.out.println("Inserte el nombre del Gestor a asociar: ");
                             nombreGestor = escaner.leerString();
                         }
-                        ClientePremium clientePremium = new ClientePremium(clientes.get(DNI), new GestorDeInversiones(DNIGestor,nombreGestor));
+                        ClientePremium clientePremium = new ClientePremium(clientes.get(DNI), new GestorDeInversiones(DNIGestor,nombreGestor, bolsa));
                         clientes.put(DNI,clientePremium); //se sustituye si existe, no hace falta eliminar antes
                     } else throw new ExcepcionClienteNoPerteneceBanco("Este cliente no pertenece al banco.");
                 }
@@ -278,6 +278,35 @@ public class BancoDeInversores implements Serializable{
         MensajeActualizacion operacionActualizacion = new MensajeActualizacion();
         agenteInversiones.guardarOperacion(operacionActualizacion);
         System.out.println("Petición almacenada en la lista de peticiones del bróker.");
+    }
+
+    public void Recomendacion() {
+        System.out.println("Introduzca DNI del cliente");
+        Escaner escaner = new Escaner();
+        String DNI = escaner.leerString();
+        Boolean validar = Utilidades.validarDNI(DNI);
+        try {
+            if (validar) {
+                try {
+                    if (clientes.containsKey(DNI)) {
+                        try {
+                            if (this.clientes.get(DNI) instanceof ClientePremium) {
+                                ((ClientePremium) this.clientes.get(DNI)).getGestor().recomendacionBolsa();
+                            } else throw new ExcepcionClientes("El cliente no es premium");
+                        }
+                        catch (ExcepcionClientes ex2) {
+                            System.out.println(ex2.getMessage());
+                        }
+                    } else throw new ExcepcionClienteNoPerteneceBanco("Este cliente no pertenece al banco.");
+                }
+                catch (ExcepcionClienteNoPerteneceBanco ex) {
+                    System.out.println(ex.getMessage());
+                }
+            } else throw new ExcepcionClientes("Valor de DNI no válido.");
+        }
+        catch(ExcepcionClientes ex){
+            System.out.println(ex.getMessage());
+        }
     }
     //endregion
 }
