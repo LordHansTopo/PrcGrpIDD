@@ -12,6 +12,7 @@ import java.io.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class BolsaDeValores implements Serializable{
     private HashMap<String,Empresa> bolsa;
@@ -131,4 +132,19 @@ public class BolsaDeValores implements Serializable{
             return respuesta.codificaMensaje();
         }
     }
+
+
+    public String empresaMayorIncremento(){
+        double mayorIncremento = 0.0;
+        String nombreMejorEmpresa = null;
+        for (Map.Entry<String, Empresa> bolsita : bolsa.entrySet()){
+            if (bolsita.getValue().getIncremento() >= mayorIncremento){
+                mayorIncremento = bolsita.getValue().getIncremento();
+                nombreMejorEmpresa = bolsita.getValue().getNombre();
+            }
+        }
+        return nombreMejorEmpresa;
+    }
+
+
 }

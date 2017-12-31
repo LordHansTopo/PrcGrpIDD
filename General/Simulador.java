@@ -45,11 +45,10 @@ public class Simulador {
                     bancoDeInversores.cargarCopiaSeguridad("CopiaBanco.bin");
                     break;
                 case 7:
-                    bancoDeInversores.mejorarCliente();
+                    bancoDeInversores.mejorarCliente(bolsaDeValores);
                     break;
                 case 8:
-                    //bancoDeInversores.Recomendacion();
-                    System.out.println("WIP");
+                    bancoDeInversores.Recomendacion();
                     break;
                 case 9:
                     bolsaDeValores.AñadirEmpresa();
