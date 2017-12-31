@@ -1,10 +1,8 @@
 package Banco;
 
 import Bolsa.BolsaDeValores;
-import Bolsa.Empresa;
 import Excepciones.*;
 import General.Escaner;
-import General.Utilidades;
 import Mensajes.MensajeActualizacion;
 import Mensajes.MensajeCompra;
 import Mensajes.MensajeVenta;
@@ -15,13 +13,15 @@ import java.io.*;
 
 public class BancoDeInversores implements Serializable{
     //region Atributos
+    private String nombre;
     private AgenteInversiones agenteInversiones;
     private HashMap<String, Cliente> clientes;
 
     //endregion
     //region Constructor
-    public BancoDeInversores(AgenteInversiones agente){
+    public BancoDeInversores(AgenteInversiones agente, String Nombre){
         agenteInversiones = agente;
+        nombre=Nombre;
         clientes = new HashMap<String, Cliente>();
     }
     //endregion
@@ -30,10 +30,7 @@ public class BancoDeInversores implements Serializable{
     public void insertarCliente(){
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
-        String DNI = escaner.leerString();
-        Boolean validar = Utilidades.validarDNI(DNI); //comprobador de DNI valido
-        try {
-            if (validar) {
+        String DNI = escaner.leerDNI();
                 try {
                     if (!this.clientes.containsKey(DNI)) {
                         //si el cliente es nuevo se pide la introduccion de datos
@@ -46,41 +43,27 @@ public class BancoDeInversores implements Serializable{
                         this.clientes.put(DNI, cliente);
                         System.out.println("Cliente introducido correctamente");
                     } else {
-                        throw new ExcepcionClienteNoPerteneceBanco("Este cliente ya pertenece al banco.");
+                        throw new ExcepcionPertenenciaBanco("Este cliente ya pertenece al banco.");
                     }
-                } catch (ExcepcionClienteNoPerteneceBanco ex2) {
+                } catch (ExcepcionPertenenciaBanco ex2) {
                     System.out.println(ex2.getMessage());
                 }
-            } else {
-                throw new ExcepcionClientes("Valor de DNI no valido");
-            }
-        }catch (ExcepcionClientes ex1){
-            System.out.println(ex1.getMessage());
-        }
     }
 
     public void eliminarCliente(){
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
-        String DNI = escaner.leerString();
-        Boolean validar = Utilidades.validarDNI(DNI);
+        String DNI = escaner.leerDNI();
         try {
-            if (validar) {
-                try {
-                    if (this.clientes.containsKey(DNI)) {
-                        this.clientes.remove(DNI);
-                        System.out.println("Cliente con DNI: " + DNI + " Ha sido correctamente eliminado");
-                    } else {
-                        throw new ExcepcionClienteNoPerteneceBanco("Cliente no pertenece al banco");
-                    }
-                } catch (ExcepcionClienteNoPerteneceBanco ex2) {
-                    System.out.println(ex2.getMessage());
+            if (this.clientes.containsKey(DNI)) {
+                this.clientes.remove(DNI);
+                System.out.println("Cliente con DNI: " + DNI + " Ha sido correctamente eliminado");
+                } else {
+                    throw new ExcepcionPertenenciaBanco("Cliente no pertenece al banco");
                 }
-            } else {
-                throw new ExcepcionClientes("Valor de DNI no valido");
-            }
-        }catch (ExcepcionClientes ex1){
-            System.out.println(ex1.getMessage());
+        }
+        catch (ExcepcionPertenenciaBanco ex2) {
+            System.out.println(ex2.getMessage());
         }
     }
 
@@ -89,6 +72,7 @@ public class BancoDeInversores implements Serializable{
             System.out.println("No hay clientes registrados.");
         }
         else {
+            System.out.println("Clientes de " + nombre + ":");
             for (Map.Entry<String, Cliente> cliente : clientes.entrySet()) {
                 //bucle que en cada cliente imprime su informacion
                 System.out.println("DNI: " + cliente.getKey());
@@ -107,41 +91,41 @@ public class BancoDeInversores implements Serializable{
     public void mejorarCliente(BolsaDeValores bolsa) {
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
-        String DNI = escaner.leerString();
-        Boolean validar = Utilidades.validarDNI(DNI);
+        String DNI = escaner.leerDNI();
         try {
-            if (validar) {
+            if (clientes.get(DNI) instanceof ClientePremium) throw new ExcepcionClientePremium(DNI);
                 try {
                     if (clientes.containsKey(DNI)) {
                         System.out.println("Inserte el DNI del Gestor a asociar (Se creará si no existe):");
-                        String DNIGestor = escaner.leerString();
-                        if (!Utilidades.validarDNI(DNIGestor)) throw new ExcepcionClientes("Valor de DNI no válido.");
+                        String DNIGestor = escaner.leerDNI();
 
                         String nombreGestor = null;
-                        for (Map.Entry<String,Cliente> cliente : clientes.entrySet()){
-                            if(cliente.getValue() instanceof ClientePremium) {
+                        for (Map.Entry<String, Cliente> cliente : clientes.entrySet()) {
+                            if (cliente.getValue() instanceof ClientePremium) {
                                 GestorDeInversiones buscarGestor = ((ClientePremium) cliente.getValue()).getGestor();
-                                if (buscarGestor.getDNI().equalsIgnoreCase(DNIGestor)){
+                                if (buscarGestor.getDNI().equalsIgnoreCase(DNIGestor)) {
                                     nombreGestor = buscarGestor.getNombre();
+                                    System.out.println("Se asociará el gestor de nombre " + nombreGestor + ".");
                                     break;
                                 }
                             }
                         }
-                        if (nombreGestor==null){
+                        if (nombreGestor == null) {
                             System.out.println("Inserte el nombre del Gestor a asociar: ");
                             nombreGestor = escaner.leerString();
+                            System.out.println("Gestor creado con éxito.");
                         }
-                        ClientePremium clientePremium = new ClientePremium(clientes.get(DNI), new GestorDeInversiones(DNIGestor,nombreGestor, bolsa));
-                        clientes.put(DNI,clientePremium); //se sustituye si existe, no hace falta eliminar antes
-                    } else throw new ExcepcionClienteNoPerteneceBanco("Este cliente no pertenece al banco.");
-                }
-                catch (ExcepcionClienteNoPerteneceBanco ex) {
+                        ClientePremium clientePremium = new ClientePremium(clientes.get(DNI), new GestorDeInversiones(DNIGestor, nombreGestor, bolsa));
+                        clientes.put(DNI, clientePremium); //se sustituye si existe, no hace falta eliminar antes
+                        System.out.println("El cliente ha sido mejorado.");
+                    } else throw new ExcepcionPertenenciaBanco("Este cliente no pertenece al banco.");
+                } catch (ExcepcionPertenenciaBanco ex) {
                     System.out.println(ex.getMessage());
                 }
-            } else throw new ExcepcionClientes("Valor de DNI no válido.");
-        }
-        catch(ExcepcionClientes ex){
-            System.out.println(ex.getMessage());
+            }
+        catch (ExcepcionClientePremium ex){
+            System.out.println("Este cliente ya es premium.");
+            System.out.println("DNI :" + ex.getDNI());
         }
     }
 
@@ -150,14 +134,13 @@ public class BancoDeInversores implements Serializable{
         else {
             try(FileOutputStream file = new FileOutputStream(path);
                  ObjectOutputStream output = new ObjectOutputStream(file);) {
+                output.writeObject(nombre);
                 output.writeObject(clientes);
                 System.out.println("Copia guardada con éxito en " + path);
             } catch (FileNotFoundException fnfex) {
                 System.out.println("Error: No se puede escribir el fichero en disco. (FileNotFoundException)");
             } catch (IOException ioex) {
                 System.out.println("Error de E/S. (IOException)");
-                System.out.println(ioex.getCause());
-                System.out.println(ioex.getMessage());
                 ioex.printStackTrace();
             }
         }
@@ -169,6 +152,7 @@ public class BancoDeInversores implements Serializable{
                 InputStream buffer = new BufferedInputStream(file);
                 ObjectInput input = new ObjectInputStream(buffer);
         ){
+            this.nombre = (String) input.readObject();
             this.clientes = (HashMap<String,Cliente>) input.readObject();
             System.out.println("Copia cargada con éxito en " + path);
         }
@@ -181,6 +165,9 @@ public class BancoDeInversores implements Serializable{
         catch(ClassNotFoundException cnfex){
             System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassNotFoundException)");
         }
+        catch(ClassCastException csex){
+            System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassCastException)");
+        }
     }
 
     public void ComprarAccion (String DNI,String Empresa, int numAcciones, double precioAccion){
@@ -188,10 +175,10 @@ public class BancoDeInversores implements Serializable{
             if(this.clientes.containsKey(DNI)){
                 this.clientes.get(DNI).compraPaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la compra de las acciones
             } else {
-                throw new ExcepcionClientes("Cliente no existe");
+                throw new ExcepcionPertenenciaBanco("El cliente no existe");
             }
-        }catch (ExcepcionClientes ex){
-            ex.getMessage();
+        }catch (ExcepcionPertenenciaBanco ex){
+            System.out.println(ex.getMessage());
         }
 
     }
@@ -201,10 +188,10 @@ public class BancoDeInversores implements Serializable{
             if (this.clientes.containsKey(DNI)) {
                 this.clientes.get(DNI).vendePaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la venta de las acciones
             } else {
-                throw new ExcepcionClientes("Cliente no existe");
+                throw new ExcepcionPertenenciaBanco("El cliente no existe");
             }
-        }catch (ExcepcionClientes ex){
-            ex.getMessage();
+        }catch (ExcepcionPertenenciaBanco ex){
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -220,12 +207,12 @@ public class BancoDeInversores implements Serializable{
         try {
             Escaner escaner = new Escaner();
             System.out.println("Introduzca el DNI del cliente: ");
-            String DNI = escaner.leerString();
-            if (!clientes.containsKey(DNI)) throw new ExcepcionNoExisteValor();
+            String DNI = escaner.leerDNI();
+            if (!clientes.containsKey(DNI)) throw new ExcepcionPertenenciaBanco(DNI);
 
             System.out.println("Introduzca el nombre de la empresa: ");
             String empresa = escaner.leerString();
-            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionNoExisteValor();
+            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionExistenciaEmpresa();
 
             System.out.println("Introduzca la cantidad máxima a invertir: ");
             double cantidadMax = escaner.leerDouble();
@@ -235,8 +222,11 @@ public class BancoDeInversores implements Serializable{
             agenteInversiones.guardarOperacion(operacionCompra);
             System.out.println("Petición almacenada en la lista de peticiones del bróker.");
         }
-        catch (ExcepcionNoExisteValor e){
-            System.out.println("El valor introducido no existe.");
+        catch (ExcepcionPertenenciaBanco e){
+            System.out.println("El cliente no pertenece al banco");
+        }
+        catch (ExcepcionExistenciaEmpresa e){
+            System.out.println("Esta empresa no existe en la bolsa.");
         }
         catch (ExcepcionSaldoInsuficiente e){
             System.out.println("El cliente no tiene dinero suficiente para realizar esta operación.");
@@ -247,12 +237,12 @@ public class BancoDeInversores implements Serializable{
         try{
             Escaner escaner = new Escaner();
             System.out.println("Introduzca el DNI del cliente: ");
-            String DNI = escaner.leerString();
-            if (!clientes.containsKey(DNI)) throw new ExcepcionNoExisteValor();
+            String DNI = escaner.leerDNI();
+            if (!clientes.containsKey(DNI)) throw new ExcepcionPertenenciaBanco();
 
             System.out.println("Introduzca el nombre de la empresa: ");
             String empresa = escaner.leerString();
-            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionNoExisteValor();
+            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionExistenciaEmpresa();
 
             System.out.println("Introduzca el número de acciones a vender: ");
             int acciones = escaner.leerInt();
@@ -263,8 +253,11 @@ public class BancoDeInversores implements Serializable{
             agenteInversiones.guardarOperacion(operacionVenta);
             System.out.println("Petición almacenada en la lista de peticiones del bróker.");
         }
-        catch (ExcepcionNoExisteValor ex){
-            System.out.println("El valor introducido no existe");
+        catch (ExcepcionExistenciaEmpresa ex){
+            System.out.println("Esta empresa no existe en la bolsa.");
+        }
+        catch (ExcepcionPertenenciaBanco ex){
+            System.out.println("Este cliente no pertenece al banco.");
         }
         catch (ExcepcionNoNulo ex){
             System.out.println("Error: no se puede comprar este número de acciones.");
@@ -280,33 +273,27 @@ public class BancoDeInversores implements Serializable{
         System.out.println("Petición almacenada en la lista de peticiones del bróker.");
     }
 
-    public void Recomendacion() {
+    public void Recomendacion(BolsaDeValores bolsa) {
         System.out.println("Introduzca DNI del cliente");
         Escaner escaner = new Escaner();
-        String DNI = escaner.leerString();
-        Boolean validar = Utilidades.validarDNI(DNI);
+        String DNI = escaner.leerDNI();
         try {
-            if (validar) {
+            if (clientes.containsKey(DNI)) {
                 try {
-                    if (clientes.containsKey(DNI)) {
-                        try {
-                            if (this.clientes.get(DNI) instanceof ClientePremium) {
-                                ((ClientePremium) this.clientes.get(DNI)).getGestor().recomendacionBolsa();
-                            } else throw new ExcepcionClientes("El cliente no es premium");
-                        }
-                        catch (ExcepcionClientes ex2) {
-                            System.out.println(ex2.getMessage());
-                        }
-                    } else throw new ExcepcionClienteNoPerteneceBanco("Este cliente no pertenece al banco.");
-                }
-                catch (ExcepcionClienteNoPerteneceBanco ex) {
-                    System.out.println(ex.getMessage());
-                }
-            } else throw new ExcepcionClientes("Valor de DNI no válido.");
-        }
-        catch(ExcepcionClientes ex){
-            System.out.println(ex.getMessage());
-        }
+                    if (this.clientes.get(DNI) instanceof ClientePremium) {
+                        ((ClientePremium) this.clientes.get(DNI)).getGestor().setBolsa(bolsa);
+                        ((ClientePremium) this.clientes.get(DNI)).getGestor().recomendacionBolsa();
+                        } else throw new ExcepcionClientePremium(DNI);
+                    }
+                    catch (ExcepcionClientePremium ex2) {
+                        System.out.println("El cliente de DNI: " + ex2.getDNI() + "no es premium.");
+                    }
+            }
+            else throw new ExcepcionPertenenciaBanco("Este cliente no pertenece al banco.");
+            }
+            catch (ExcepcionPertenenciaBanco ex) {
+                System.out.println(ex.getMessage());
+            }
     }
     //endregion
 }
