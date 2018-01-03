@@ -52,35 +52,44 @@ public class AgenteInversiones extends Persona {
             System.out.println("No hay peticiones.");
         }
         else {
+            DecimalFormat formateadorValores = new DecimalFormat("0.00");
             for (Mensaje actual : operacionesPendientes) {
                 String respuestaCodificado = bolsaDeValores.intentaOperacion(actual.codificaMensaje());
                 String[] datos = Mensaje.parser(respuestaCodificado);
                 if (actual instanceof MensajeCompra) {
-                    //[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|250(precioAcc)|50(dinero restante)]
-                    if (Boolean.parseBoolean(datos[3]))
+                    //identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesCompradas
+                    //+ "|" + precioAccion + "|" + cantidadRestante;
+                    if (Boolean.parseBoolean(datos[3])){
                         banco.ComprarAccion(datos[1], datos[2], Integer.parseInt(datos[4]),
                                 Double.parseDouble(datos[5]));
+                        System.out.println("Compra realizada. Datos:");
+                        System.out.println("Cliente: " + datos[1]);
+                        System.out.println("Empresa: " + datos[2]);
+                        System.out.println("Número de acciones compradas: " + datos[4]);
+                        System.out.println("Precio de cada acción: " + formateadorValores.format(Double.parseDouble(datos[5])) + " €");
+                        System.out.println("Cantidad sobrante: " + formateadorValores.format(Double.parseDouble(datos[6])) + " €\n");
+                    }
+                    else{
+                        System.out.println("No se ha podido realizar la compra. El precio de acción es superior a la cantidad recibida.\n");
+                    }
                     resultadoDeOperaciones.add(new MensajeRespuestaCompra(Integer.parseInt(datos[0]), datos[1], datos[2],
                             Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
                             Double.parseDouble(datos[6])));
-                    System.out.println("Compra realizada. Datos:");
-                    System.out.println("Cliente: " + datos[1]);
-                    System.out.println("Empresa: " + datos[2]);
-                    System.out.println("Número de acciones compradas: " + datos[4]);
-                    System.out.println("Precio de cada acción: " + datos[5] + " €");
-                    System.out.println("Cantidad sobrante: " + datos[6] + " €\n");
                 } else if (actual instanceof MensajeVenta) {
-                    //[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|500(gananciaTotal)]
+                    //identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion
+                    //        + "|" + gananciasTotales;
                     if (Boolean.parseBoolean(datos[3])) {
-                        banco.VenderAccion(datos[1], datos[2], Integer.parseInt(datos[4]), Integer.parseInt(datos[5])); //faltaba datos 5 si no no dejaba por tener dimensiones diferentes(?)
+                        banco.VenderAccion(datos[1], datos[2], Integer.parseInt(datos[4]), Double.parseDouble(datos[5]));
                         System.out.println("Venta realizada. Datos:");
                         System.out.println("Cliente: " + datos[1]);
                         System.out.println("Empresa: " + datos[2]);
                         System.out.println("Número de acciones vendidas: " + datos[4]);
-                        System.out.println("Precio de cada acción: " + datos[5] + "€");
-                        System.out.println("Ganancia total: " + datos[6] + " €\n");
+                        System.out.println("Precio de cada acción: " + formateadorValores.format(Double.parseDouble(datos[5])) + "€");
+                        System.out.println("Ganancia total: " + formateadorValores.format(Double.parseDouble(datos[6])) + " €\n");
                     }
-
+                    else{
+                        System.out.println("No se ha podido realizar la venta. Esta empresa ya no existe.\n");
+                    }
                     resultadoDeOperaciones.add(new MensajeRespuestaVenta(Integer.parseInt(datos[0]), datos[1], datos[2],
                             Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
                             Double.parseDouble(datos[6])));

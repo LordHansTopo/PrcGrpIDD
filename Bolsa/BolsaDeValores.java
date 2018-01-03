@@ -22,10 +22,14 @@ public class BolsaDeValores implements Serializable{
         Escaner escaner = new Escaner();
         System.out.println("Introduzca el nombre de la empresa a añadir:");
         String nombre = escaner.leerString();
+        System.out.println("Inserte el valor mínimo que deberían tener las acciones:");
+        double minimo = escaner.leerDouble();
+        System.out.println("Inserte el valor máximo que deberían tener las acciones:");
+        double maximo = escaner.leerDouble();
         try {
             if (bolsa.containsKey(nombre)) throw new ExcepcionExistenciaEmpresa(nombre,"La empresa ya existe.");
             else {
-                Empresa empresa = new Empresa(nombre);
+                Empresa empresa = new Empresa(nombre,minimo,maximo);
                 bolsa.put(nombre,empresa);
                 System.out.println("La empresa ha sido introducida con éxito.");
             }
@@ -60,7 +64,12 @@ public class BolsaDeValores implements Serializable{
             System.out.println("La bolsa no contiene empresas.");
         }
     }
-    public void ActualizarValoresBolsa(double valorMin, double valorMax){
+    public void ActualizarValoresBolsa(){
+        Escaner escaner = new Escaner();
+        System.out.println("Inserte el valor mínimo que deberían tener las acciones:");
+        double valorMin = escaner.leerDouble();
+        System.out.println("Inserte el valor máximo que deberían tener las acciones:");
+        double valorMax = escaner.leerDouble();
         if (valorMin<valorMax) {
             bolsa.forEach((k, v) -> v.actualizarValoresEmpresa(Utilidades.GenerarNumAleat(valorMin, valorMax)));
             System.out.println("Valor de acciones de todas las empresas actualizados.");
@@ -113,20 +122,48 @@ public class BolsaDeValores implements Serializable{
         try{ //Comprobar tipo de mensaje
             int comprobarTipoMensaje = Integer.parseInt(datos[3]);
             //Si el mensaje es MensajeVenta
+            //identificador +"|"+ cliente +"|"+ empresa +"|"+ numAcc;
+            double precioAccion,ganancia;
+            boolean esRealizable = bolsa.containsKey(datos[2]);
+            if (esRealizable) {
+                precioAccion = bolsa.get(datos[2]).getValor();
+                ganancia = comprobarTipoMensaje*bolsa.get(datos[2]).getValor();
+            }
+            else{
+                precioAccion = 0;
+                ganancia = 0;
+            }
+            //identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion
+            //+ "|" + gananciasTotales;
             MensajeRespuestaVenta respuesta = new MensajeRespuestaVenta(Integer.parseInt(datos[0]),datos[1],datos[2],
-                    (bolsa.get(datos[2]).getValor()!=0),comprobarTipoMensaje,bolsa.get(datos[2]).getValor(),
-                    (comprobarTipoMensaje*bolsa.get(datos[2]).getValor()));
+                    esRealizable,comprobarTipoMensaje,precioAccion,ganancia);
             return respuesta.codificaMensaje();
         }
         catch (NumberFormatException mensajeCompra){ //Si el mensaje es MensajeCompra
-            boolean esRealizable = Double.parseDouble(datos[3]) < bolsa.get(datos[2]).getValor();
-            int numCompradas = (int) (Double.parseDouble(datos[3])/bolsa.get(datos[2]).getValor());
+            boolean esRealizable;
+            int numCompradas;
+            double precioAccion,cantidadRestante;
+            //identificador +"|"+ cliente +"|" + empresa + "|"+ cantidadMax
+            if (bolsa.containsKey(datos[2])){
+                esRealizable = Double.parseDouble(datos[3]) > bolsa.get(datos[2]).getValor();
+                numCompradas = (int) (Double.parseDouble(datos[3])/bolsa.get(datos[2]).getValor());
+                precioAccion=bolsa.get(datos[2]).getValor();
+                cantidadRestante=Double.parseDouble(datos[3])-numCompradas*(bolsa.get(datos[2]).getValor());
+            }
+            else{
+                esRealizable=false;
+                numCompradas=0;
+                precioAccion=0;
+                cantidadRestante=0;
+            }
+            //identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesCompradas
+            //+ "|" + precioAccion + "|" + cantidadRestante;
             MensajeRespuestaCompra respuesta= new MensajeRespuestaCompra(Integer.parseInt(datos[0]),datos[1],datos[2],
-                    esRealizable,numCompradas,bolsa.get(datos[2]).getValor(),
-                    (Double.parseDouble(datos[3])-numCompradas*(bolsa.get(datos[2]).getValor())));
+                    esRealizable,numCompradas,precioAccion, cantidadRestante);
             return respuesta.codificaMensaje();
         }
         catch (ArrayIndexOutOfBoundsException mensajeActualizacion){ //Si el mensaje es MensajeActualizacion
+            //identificador + "|" + fecha.format(formateador);
             String[] nombresEmpresas = new String[bolsa.size()];
             Double[] valoresAcciones = new Double[bolsa.size()];
             int i = 0;
@@ -135,6 +172,7 @@ public class BolsaDeValores implements Serializable{
                 valoresAcciones[i] = valor.getValor();
                 i++;
             }
+            //ID|Empresa1|PrecioAccion1|...|...|EmpresaN|PrecioAccionN
             MensajeRespuestaActualizacion respuesta = new MensajeRespuestaActualizacion(Integer.parseInt(datos[0]),
                     nombresEmpresas,valoresAcciones);
             return respuesta.codificaMensaje();

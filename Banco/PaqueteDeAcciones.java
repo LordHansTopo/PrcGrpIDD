@@ -36,28 +36,32 @@ public class PaqueteDeAcciones implements Serializable{
         this.numeroTitulos = numeroTitulos;
     }
 
-    private Double getPrecioIndividual() {
+    public Double getPrecioIndividual() {
         return precioIndividual;
     }
 
-    private void setPrecioIndividual(double precioIndividual) {
+    public void setPrecioIndividual(double precioIndividual) {
         this.precioIndividual = precioIndividual;
     }
 
-    private Double getPrecioCompleto() {
+    public Double getPrecioCompleto() {
         return precioCompleto;
     }
 
-    private void setPrecioCompleto() {
+    public void setPrecioCompleto() {
         this.precioCompleto = (getNumeroTitulos() * getPrecioIndividual());
     }
 
-    private Double getPrecioOriginal() {
+    public Double getPrecioOriginal() {
         return precioOriginal;
     }
 
-    private void setVariacion() {
-        this.variacion = (getPrecioCompleto() - getPrecioOriginal());
+    public void setVariacion() {
+        this.variacion = (getPrecioIndividual() - getPrecioOriginal());
+    }
+
+    public double getVariacion() {
+        return variacion;
     }
 
     //endregion

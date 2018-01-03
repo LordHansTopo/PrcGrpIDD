@@ -18,7 +18,7 @@ public class Escaner {
             try {
                 return input.nextInt();
             } catch (InputMismatchException ex) {
-                System.out.println("Error: Este valor no es un número entero, intenta de nuevo:");
+                System.out.println("Error: Este valor no es un número entero válido, intenta de nuevo:");
                 input.next();
             }
         }
@@ -29,7 +29,7 @@ public class Escaner {
             try {
                 return input.nextDouble();
             } catch (InputMismatchException ex) {
-                System.out.println("Error: Este valor no es un número, intenta de nuevo:");
+                System.out.println("Error: Este valor no es un número válido, intenta de nuevo:");
                 input.next();
             }
         }
@@ -56,7 +56,7 @@ public class Escaner {
                 String DNI = input.nextLine();
                 if (DNI.isEmpty()) throw new ExcepcionNoNulo();
                 if (!Utilidades.validarDNI(DNI)) throw new ExcepcionDNIInvalido(DNI);
-                else return DNI;
+                else return DNI.toUpperCase();
             }
             catch (ExcepcionNoNulo ex){
                 System.out.println("Error: No se ha introducido valor, intenta de nuevo:");

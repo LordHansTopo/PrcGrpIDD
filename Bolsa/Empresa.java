@@ -22,9 +22,9 @@ public class Empresa implements Serializable{
         return incremento;
     }
 
-    public Empresa(String nombre){
+    public Empresa(String nombre,double minimo, double maximo){
         this.nombre=nombre;
-        this.valor= Utilidades.GenerarNumAleat(30000);
+        this.valor= Utilidades.GenerarNumAleat(minimo,maximo);
         this.valorAnt=0;
         this.incremento=valor;
     }
