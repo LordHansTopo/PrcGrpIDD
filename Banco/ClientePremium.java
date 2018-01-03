@@ -6,14 +6,14 @@ public class ClientePremium extends Cliente {
 
     //Endregion
     //Constructores
-    public ClientePremium(String nombre, String DNI, double saldo, GestorDeInversiones gestor){
+    public ClientePremium(String nombre, String DNI, double saldo, GestorDeInversiones Gestor){
         super(nombre, DNI, saldo);
-        setGestor(gestor);
+        gestor=Gestor;
     }
 
-    public ClientePremium(Cliente cliente, GestorDeInversiones gestor){
+    public ClientePremium(Cliente cliente, GestorDeInversiones Gestor){
         super(cliente.getNombre(), cliente.getDNI(), cliente.getSaldo());
-        setGestor(gestor);
+        gestor=Gestor;
 
     }
 
@@ -21,10 +21,6 @@ public class ClientePremium extends Cliente {
     //Getters y Setters
     public GestorDeInversiones getGestor() {
         return gestor;
-    }
-
-    public void setGestor(GestorDeInversiones gestor) {
-        this.gestor = gestor;
     }
 
     //Endregion

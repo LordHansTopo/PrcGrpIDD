@@ -27,13 +27,6 @@ public class PaqueteDeAcciones implements Serializable{
 
     //endregion
     //region Getters y Setters
-    public String getNombreEmpresa() {
-        return nombreEmpresa;
-    }
-
-    public void setNombreEmpresa(String nombreEmpresa) {
-        this.nombreEmpresa = nombreEmpresa;
-    }
 
     public Integer getNumeroTitulos() {
         return numeroTitulos;
@@ -43,35 +36,27 @@ public class PaqueteDeAcciones implements Serializable{
         this.numeroTitulos = numeroTitulos;
     }
 
-    public Double getPrecioIndividual() {
+    private Double getPrecioIndividual() {
         return precioIndividual;
     }
 
-    public void setPrecioIndividual(double precioIndividual) {
+    private void setPrecioIndividual(double precioIndividual) {
         this.precioIndividual = precioIndividual;
     }
 
-    public Double getPrecioCompleto() {
+    private Double getPrecioCompleto() {
         return precioCompleto;
     }
 
-    public void setPrecioCompleto() {
+    private void setPrecioCompleto() {
         this.precioCompleto = (getNumeroTitulos() * getPrecioIndividual());
     }
 
-    public Double getPrecioOriginal() {
+    private Double getPrecioOriginal() {
         return precioOriginal;
     }
 
-    public void setPrecioOriginal(double precioOriginal) {
-        this.precioOriginal = precioOriginal;
-    }
-
-    public Double getVariacion() {
-        return variacion;
-    }
-
-    public void setVariacion() {
+    private void setVariacion() {
         this.variacion = (getPrecioCompleto() - getPrecioOriginal());
     }
 

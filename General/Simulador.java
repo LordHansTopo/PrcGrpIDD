@@ -3,8 +3,6 @@ package General;
 import Bolsa.*;
 import Banco.*;
 
-import java.io.File;
-
 public class Simulador {
     //region atributos
     private InterfazDeUsuario interfaz;

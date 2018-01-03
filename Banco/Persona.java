@@ -20,7 +20,7 @@ public class Persona implements Serializable{
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    private void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
