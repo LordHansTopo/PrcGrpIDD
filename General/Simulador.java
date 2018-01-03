@@ -56,12 +56,7 @@ public class Simulador {
                     bolsaDeValores.EliminarEmpresa();
                     break;
                 case 11:
-                    Escaner escaner = new Escaner();
-                    System.out.println("Inserte el valor mínimo que deberían tener las acciones:");
-                    double minimo = escaner.leerDouble();
-                    System.out.println("Inserte el valor máximo que deberían tener las acciones:");
-                    double maximo = escaner.leerDouble();
-                    bolsaDeValores.ActualizarValoresBolsa(minimo,maximo);
+                    bolsaDeValores.ActualizarValoresBolsa();
                     break;
                 case 12:
                     bolsaDeValores.GuardarCopia("CopiaBolsa.bin");

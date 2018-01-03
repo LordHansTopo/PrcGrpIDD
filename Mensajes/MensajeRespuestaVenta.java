@@ -22,4 +22,5 @@ public class MensajeRespuestaVenta extends MensajeCompra{
     }
 
 }
-//[5004(id)|Antonio(nom)|Kokacola(emp)|true/false|2(numAcc)|500(monei a ganar)]
+//identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesVendidas + "|" + precioAccion
+//                + "|" + gananciasTotales;
