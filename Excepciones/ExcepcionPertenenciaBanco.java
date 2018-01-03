@@ -1,10 +1,14 @@
 package Excepciones;
 
 public class ExcepcionPertenenciaBanco extends Exception {
-    public ExcepcionPertenenciaBanco(){
-        super();
-    }
-    public ExcepcionPertenenciaBanco(String message){
+    private String DNI;
+
+    public ExcepcionPertenenciaBanco(String dni,String message){
         super(message);
+        DNI=dni;
+    }
+
+    public String getDNI() {
+        return DNI;
     }
 }
