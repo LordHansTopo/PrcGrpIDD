@@ -136,7 +136,7 @@ public class BancoDeInversores implements Serializable{
         if (clientes.isEmpty()) System.out.println("El banco está vacío. No se guardará copia de seguridad");
         else {
             try(FileOutputStream file = new FileOutputStream(path);
-                 ObjectOutputStream output = new ObjectOutputStream(file);) {
+                 ObjectOutputStream output = new ObjectOutputStream(file)) {
                 output.writeObject(nombre);
                 output.writeObject(clientes);
                 System.out.println("Copia guardada con éxito en " + path);
@@ -153,7 +153,7 @@ public class BancoDeInversores implements Serializable{
         try(
                 InputStream file = new FileInputStream(path);
                 InputStream buffer = new BufferedInputStream(file);
-                ObjectInput input = new ObjectInputStream(buffer);
+                ObjectInput input = new ObjectInputStream(buffer)
         ){
             this.nombre = (String) input.readObject();
             this.clientes = (HashMap<String,Cliente>) input.readObject();

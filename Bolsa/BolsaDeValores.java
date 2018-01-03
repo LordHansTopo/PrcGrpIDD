@@ -87,7 +87,7 @@ public class BolsaDeValores implements Serializable{
         try(
                 InputStream file = new FileInputStream(path);
                 InputStream buffer = new BufferedInputStream(file);
-                ObjectInput input = new ObjectInputStream(buffer);
+                ObjectInput input = new ObjectInputStream(buffer)
         ){
             this.bolsa = (HashMap<String,Empresa>) input.readObject();
             System.out.println("Copia cargada con éxito en " + path);

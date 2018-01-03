@@ -12,9 +12,9 @@ public class Cliente extends Persona {
 
     //endregion
     //region Constructor
-    public Cliente(String nombre, String DNI, double saldo){
+    public Cliente(String nombre, String DNI, double Saldo){
         super(nombre, DNI);
-        setSaldo(saldo);
+        saldo=Saldo;
         paqueteDelCliente = new HashMap<String, PaqueteDeAcciones>();
     }
 
@@ -23,10 +23,6 @@ public class Cliente extends Persona {
 
     public double getSaldo() {
         return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
     }
 
     //endregion

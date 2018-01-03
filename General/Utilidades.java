@@ -19,7 +19,7 @@ public class Utilidades {
         return Integer.max(r.nextInt(LimiteSup)+LimiteInf,r.nextInt(LimiteSup));
     }
     public static boolean validarDNI(String DNI) { //funcion validadora de DNI
-        boolean correcto = false;
+        boolean correcto;
         Pattern pattern = Pattern.compile("(\\d{1,8})([TRWAGMYFPDXBNJZSQVHLCKEtrwagmyfpdxbnjzsqvhlcke])"); //comprueba si sigue el patron de 8 numeros seguido de una letra
         Matcher matcher = pattern.matcher(DNI);
         if (matcher.matches()) { //si sigue el patron, entonces comprueba si el numero modulo 23 genera la letra apropiada
@@ -28,11 +28,7 @@ public class Utilidades {
             int index = Integer.parseInt(matcher.group(1));
             index = index % 23;
             String reference = letras.substring(index, index + 1);
-            if (reference.equalsIgnoreCase(letraDNI)) {
-                correcto = true;
-            } else {
-                correcto = false;
-            }
+            correcto = reference.equalsIgnoreCase(letraDNI);
         } else {
             correcto = false;
         }

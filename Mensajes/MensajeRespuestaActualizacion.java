@@ -12,18 +12,6 @@ public class MensajeRespuestaActualizacion extends MensajeActualizacion{
         System.arraycopy(ValoresAcciones,0,valoresAcciones,0,valoresAcciones.length);
     }
 
-    public String[] getNombresEmpresas() {
-        String copia[] = new String[this.nombresEmpresas.length];
-        System.arraycopy(this.nombresEmpresas,0,copia,0,copia.length);
-        return copia;
-    }
-
-    public Double[] getValoresAcciones() {
-        Double copia[] = new Double[this.valoresAcciones.length];
-        System.arraycopy(this.valoresAcciones,0,copia,0,copia.length);
-        return copia;
-    }
-
     public String codificaMensaje(){
         String mensaje = null;
         StringBuilder sb = new StringBuilder();

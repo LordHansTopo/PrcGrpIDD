@@ -1,11 +1,9 @@
 package General;
 
-import Excepciones.ExcepcionClientePremium;
 import Excepciones.ExcepcionDNIInvalido;
 import Excepciones.ExcepcionNoNulo;
 
 import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Escaner {

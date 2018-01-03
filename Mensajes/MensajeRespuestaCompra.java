@@ -6,22 +6,6 @@ public class MensajeRespuestaCompra extends MensajeCompra{
     private int accionesCompradas;
     private double precioAccion,cantidadRestante;
     
-    public boolean isResultadoOp() {
-        return resultadoOp;
-    }
-
-    public int getAccionesCompradas() {
-        return accionesCompradas;
-    }
-
-    public double getPrecioAccion() {
-        return precioAccion;
-    }
-
-    public double getCantidadRestante() {
-        return cantidadRestante;
-    }
-    
     public MensajeRespuestaCompra(int ID, String Cliente, String Empresa, boolean resultado, int compradas,double precioAccion,double restante){
         identificador=ID;
         cliente=Cliente;

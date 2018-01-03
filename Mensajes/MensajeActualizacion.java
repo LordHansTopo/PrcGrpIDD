@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class MensajeActualizacion extends Mensaje{
-    protected String cliente, empresa;
-    protected LocalDateTime fecha;
+    protected String empresa;
+    private LocalDateTime fecha;
     public MensajeActualizacion(){
         super();
         this.fecha=LocalDateTime.now();

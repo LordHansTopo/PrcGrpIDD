@@ -2,9 +2,8 @@
 package Mensajes;
 
 public class MensajeVenta extends Mensaje{
-    protected String cliente, empresa;
+    private String cliente, empresa;
     private int numAcc;
-    protected MensajeVenta(){} 
     public MensajeVenta(String Cliente, String Empresa, int numAcc){
       super();
       this.cliente=Cliente;
