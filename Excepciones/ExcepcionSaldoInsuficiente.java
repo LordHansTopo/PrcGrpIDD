@@ -1,6 +1,14 @@
 package Excepciones;
 
 public class ExcepcionSaldoInsuficiente extends Exception{
-    public ExcepcionSaldoInsuficiente(){super();}
-    public ExcepcionSaldoInsuficiente(String msg){super(msg);}
+    private double saldoNecesario;
+
+    public ExcepcionSaldoInsuficiente(double SaldoNecesario,String msg){
+        super(msg);
+        saldoNecesario=SaldoNecesario;
+    }
+
+    public double getSaldoNecesario() {
+        return saldoNecesario;
+    }
 }

@@ -23,7 +23,7 @@ public class BolsaDeValores implements Serializable{
         System.out.println("Introduzca el nombre de la empresa a añadir:");
         String nombre = escaner.leerString();
         try {
-            if (bolsa.containsKey(nombre)) throw new ExcepcionExistenciaEmpresa();
+            if (bolsa.containsKey(nombre)) throw new ExcepcionExistenciaEmpresa(nombre,"La empresa ya existe.");
             else {
                 Empresa empresa = new Empresa(nombre);
                 bolsa.put(nombre,empresa);
@@ -31,7 +31,8 @@ public class BolsaDeValores implements Serializable{
             }
         }
         catch (ExcepcionExistenciaEmpresa e){
-            System.out.println("La empresa ya existe.");
+            System.out.println(e.getMessage());
+            System.out.println("Empresa:" + e.getNombreEmpresa());
         }
     }
 
@@ -44,10 +45,11 @@ public class BolsaDeValores implements Serializable{
                 bolsa.remove(eliminarNombre);
                 System.out.println("Empresa eliminada con éxito.");
             }
-            else throw new ExcepcionExistenciaEmpresa();
+            else throw new ExcepcionExistenciaEmpresa(eliminarNombre,"La empresa no existe en la bolsa");
         }
         catch(ExcepcionExistenciaEmpresa e){
-            System.out.println("La empresa no existe en la bolsa");
+            System.out.println(e.getMessage());
+            System.out.println("Empresa:" + e.getNombreEmpresa());
         }
     }
     public void EstadoBolsa(){

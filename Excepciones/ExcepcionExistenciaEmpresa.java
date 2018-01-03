@@ -1,6 +1,13 @@
 package Excepciones;
 
 public class ExcepcionExistenciaEmpresa extends Exception{
-    public ExcepcionExistenciaEmpresa(){super();}
-    public ExcepcionExistenciaEmpresa(String msg){super(msg);}
+    private String nombreEmpresa;
+    public ExcepcionExistenciaEmpresa(String NombreEmpresa,String msg){
+        super(msg);
+        nombreEmpresa=NombreEmpresa;
+    }
+
+    public String getNombreEmpresa() {
+        return nombreEmpresa;
+    }
 }
