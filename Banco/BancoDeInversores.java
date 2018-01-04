@@ -114,8 +114,9 @@ public class BancoDeInversores implements Serializable{
                         String DNIGestor = escaner.leerDNI();
                         boolean existeDNIEnClientes = false;
                         for (Map.Entry<String,Cliente> buscarDNI: clientes.entrySet()){
-                            if (buscarDNI.getValue().getDNI().equals(DNI)){
+                            if (buscarDNI.getValue().getDNI().equals(DNIGestor)){
                                 existeDNIEnClientes=true;
+                                break;
                             }
                         }
                         if (!existeDNIEnClientes) {
@@ -193,7 +194,7 @@ public class BancoDeInversores implements Serializable{
         }
     }
 
-    public void ComprarAccion (String DNI,String Empresa, int numAcciones, double precioAccion){
+    public void ComprarAccion (String DNI,String Empresa, int numAcciones, double precioAccion){ //Metodo llamado por el agente
         try{
             if(this.clientes.containsKey(DNI)){
                 this.clientes.get(DNI).compraPaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la compra de las acciones
@@ -207,7 +208,7 @@ public class BancoDeInversores implements Serializable{
 
     }
 
-    public void VenderAccion (String DNI, String Empresa, int numAcciones, double precioAccion){
+    public void VenderAccion (String DNI, String Empresa, int numAcciones, double precioAccion){ //Metodo llamado por el agente
         try {
             if (this.clientes.containsKey(DNI)) {
                 this.clientes.get(DNI).vendePaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la venta de las acciones
@@ -220,7 +221,7 @@ public class BancoDeInversores implements Serializable{
         }
     }
 
-    public void ActualizarClientes(String[] empresas, Double[] precios){ //actualiza en cada cliente todas sus acciones
+    public void ActualizarClientes(String[] empresas, Double[] precios){ //Metodo llamado por el agente que actualiza en cada cliente todas sus acciones
         for (Map.Entry<String,Cliente> cliente : clientes.entrySet()){
             for (int i=0; i < empresas.length; i++){
                 cliente.getValue().actualizarPaquete(empresas[i], precios[i]);

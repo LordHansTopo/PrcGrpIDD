@@ -12,6 +12,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Math.max;
+
 public class BolsaDeValores implements Serializable{
     private HashMap<String,Empresa> bolsa;
 
@@ -190,6 +192,21 @@ public class BolsaDeValores implements Serializable{
         }
         return nombreMejorEmpresa;
     }
+    public void aumentarValorEmpresa(String NombreEmpresa, int numAcciones){ //Metodo llamado por el agente
+        double valorAccion = bolsa.get(NombreEmpresa).getValor();
+        final double porcentajeMax = 1;
+        double maxAumento = (valorAccion*porcentajeMax/100)*(5/numAcciones); // Aumento de un 1% si se compra solo 1 accion, el aumento disminuye conforme se compran mas acciones (5 es un valor arbitrario de la funcion)
+        double aumento = Utilidades.GenerarNumAleat(1,max(5,maxAumento));
+        bolsa.get(NombreEmpresa).actualizarValoresEmpresa(
+                valorAccion+aumento);
+    }
 
-
+    public void disminuirValorEmpresa(String NombreEmpresa, int numAcciones){ //Metodo llamado por el agente
+        double valorAccion = bolsa.get(NombreEmpresa).getValor();
+        final double porcentajeMax = 1;
+        double maxDisminucion = (valorAccion*porcentajeMax/100)*(5/numAcciones); // Aumento de un 1% si se compra solo 1 accion, el aumento disminuye conforme se compran mas acciones (5 es un valor arbitrario de la funcion)
+        double aumento = Utilidades.GenerarNumAleat(1,max(5,maxDisminucion));
+        bolsa.get(NombreEmpresa).actualizarValoresEmpresa(
+                valorAccion-aumento);
+    }
 }
