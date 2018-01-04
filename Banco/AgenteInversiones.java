@@ -47,7 +47,7 @@ public class AgenteInversiones extends Persona {
             }
         }
     }
-    public void EjecutarOperaciones(BancoDeInversores banco){
+    public void EjecutarOperaciones(BancoDeInversores banco, BolsaDeValores bolsa){
         if (operacionesPendientes.isEmpty()){
             System.out.println("No hay peticiones.");
         }
@@ -62,6 +62,7 @@ public class AgenteInversiones extends Persona {
                     if (Boolean.parseBoolean(datos[3])){
                         banco.ComprarAccion(datos[1], datos[2], Integer.parseInt(datos[4]),
                                 Double.parseDouble(datos[5]));
+                        bolsa.aumentarValorEmpresa(datos[2],Integer.parseInt(datos[4]));
                         System.out.println("Compra realizada. Datos:");
                         System.out.println("Cliente: " + datos[1]);
                         System.out.println("Empresa: " + datos[2]);
@@ -80,6 +81,7 @@ public class AgenteInversiones extends Persona {
                     //        + "|" + gananciasTotales;
                     if (Boolean.parseBoolean(datos[3])) {
                         banco.VenderAccion(datos[1], datos[2], Integer.parseInt(datos[4]), Double.parseDouble(datos[5]));
+                        bolsa.disminuirValorEmpresa(datos[2],Integer.parseInt(datos[4]));
                         System.out.println("Venta realizada. Datos:");
                         System.out.println("Cliente: " + datos[1]);
                         System.out.println("Empresa: " + datos[2]);
