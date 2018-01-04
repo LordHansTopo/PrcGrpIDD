@@ -38,7 +38,6 @@ public class Cliente extends Persona {
         }else{
             //si el cliente si tiene acciones de la empresa
             int numTitulosTotal = (this.paqueteDelCliente.get(empresa).getNumeroTitulos() + numTitulos);
-            //System.out.println("El cliente ha obtenido un beneficio de: "+ this.paqueteDelCliente.get(empresa).getVariacion() +" €");
             PaqueteDeAcciones paquete = new PaqueteDeAcciones(empresa, numTitulosTotal, precioIndiv);
             this.paqueteDelCliente.put(empresa, paquete); //Al ser HashMap y tener una Key que ya existia se actualizan los valores del Object
         }
@@ -85,10 +84,7 @@ public class Cliente extends Persona {
 
     public boolean suficientesAcciones(String empresa, int numAcciones){
         //devuelve true si se dispone de tienen mas o igual numero de acciones que las disponibles
-        if (!paqueteDelCliente.containsKey(empresa)){
-            return false;
-        }
-        return (this.paqueteDelCliente.get(empresa).getNumeroTitulos()>=numAcciones);
+        return (paqueteDelCliente.containsKey(empresa)) && (this.paqueteDelCliente.get(empresa).getNumeroTitulos()>=numAcciones);
     }
     public void imprimirAcciones(){
         if (this.paqueteDelCliente.isEmpty()){
@@ -104,7 +100,7 @@ public class Cliente extends Persona {
                 System.out.println("Precio completo: " + formateadorValores.format(cliente.getValue().getPrecioCompleto()) + " €");
                 System.out.println("Precio original de compra de cada acción: " +
                         formateadorValores.format(cliente.getValue().getPrecioOriginal()) + " €");
-                System.out.println("Variación total: " + formateadorValores.format(cliente.getValue().getVariacion()) + " €\n");
+                System.out.println("Variación del precio original: " + formateadorValores.format(cliente.getValue().getVariacion()) + " €\n");
             }
         }
     }

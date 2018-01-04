@@ -11,13 +11,11 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.io.*;
 
-
 public class BancoDeInversores implements Serializable{
     //region Atributos
     private String nombre;
     private AgenteInversiones agenteInversiones;
     private HashMap<String, Cliente> clientes;
-
     //endregion
     //region Constructor
     public BancoDeInversores(AgenteInversiones agente, String Nombre){
