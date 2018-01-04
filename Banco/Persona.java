@@ -9,9 +9,9 @@ public class Persona implements Serializable{
 
     //endregion
     //region Constructor
-    public Persona(String nombre, String DNI){
-        setNombre(nombre);
-        setDNI(DNI);
+    public Persona(String Nombre, String dni){
+        nombre=Nombre;
+        DNI=dni;
     }
 
     //endregion
@@ -20,16 +20,8 @@ public class Persona implements Serializable{
         return nombre;
     }
 
-    private void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getDNI() {
         return DNI;
-    }
-
-    public void setDNI(String DNI) {
-        this.DNI = DNI;
     }
 
     //endregion
