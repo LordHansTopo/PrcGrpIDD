@@ -187,7 +187,7 @@ public class BolsaDeValores implements Serializable{
         for (Map.Entry<String, Empresa> bolsita : bolsa.entrySet()){
             if (bolsita.getValue().getIncremento() >= mayorIncremento){
                 mayorIncremento = bolsita.getValue().getIncremento();
-                nombreMejorEmpresa = bolsita.getValue().getNombre();
+                nombreMejorEmpresa = bolsita.getKey();
             }
         }
         return nombreMejorEmpresa;
