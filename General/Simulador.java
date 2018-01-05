@@ -65,10 +65,10 @@ public class Simulador {
                     bolsaDeValores.CargarCopia("CopiaBolsa.bin");
                     break;
                 case 14:
-                    bancoDeInversores.ComprarAcciones(bolsaDeValores);
+                    bancoDeInversores.ComprarAcciones();
                     break;
                 case 15:
-                    bancoDeInversores.VenderAcciones(bolsaDeValores);
+                    bancoDeInversores.VenderAcciones();
                     break;
                 case 16:
                     bancoDeInversores.ActualizarValoresBanco();

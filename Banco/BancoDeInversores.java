@@ -227,7 +227,7 @@ public class BancoDeInversores implements Serializable{
         }
     }
 
-    public void ComprarAcciones(BolsaDeValores bolsa){ // Manda mensaje de compra al broker
+    public void ComprarAcciones(){ // Manda mensaje de compra al broker
         try {
             Escaner escaner = new Escaner();
             System.out.println("Introduzca el DNI del cliente: ");
@@ -236,7 +236,6 @@ public class BancoDeInversores implements Serializable{
 
             System.out.println("Introduzca el nombre de la empresa: ");
             String empresa = escaner.leerString();
-            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionExistenciaEmpresa(empresa,"Esta empresa no existe en la bolsa.");
 
             System.out.println("Introduzca la cantidad máxima a invertir: ");
             double cantidadMax = escaner.leerDouble();
@@ -250,17 +249,13 @@ public class BancoDeInversores implements Serializable{
             System.out.println(e.getMessage());
             System.out.println("DNI: " + e.getDNI());
         }
-        catch (ExcepcionExistenciaEmpresa e){
-            System.out.println(e.getMessage());
-            System.out.println("Empresa: " + e.getNombreEmpresa());
-        }
         catch (ExcepcionSaldoInsuficiente e){
             System.out.println(e.getMessage());
             System.out.println("Saldo mínimo necesario: " + e.getSaldoNecesario());
         }
     }
 
-    public void VenderAcciones(BolsaDeValores bolsa){ // Manda mensaje de venta al broker
+    public void VenderAcciones(){ // Manda mensaje de venta al broker
         try{
             Escaner escaner = new Escaner();
             System.out.println("Introduzca el DNI del cliente: ");
