@@ -77,7 +77,7 @@ public class Simulador {
                     agenteInversiones.ImprimirOperaciones();
                     break;
                 case 18:
-                    agenteInversiones.EjecutarOperaciones(bancoDeInversores,bolsaDeValores);
+                    agenteInversiones.EjecutarOperaciones(bancoDeInversores);
                     break;
 
             }

@@ -269,7 +269,6 @@ public class BancoDeInversores implements Serializable{
 
             System.out.println("Introduzca el nombre de la empresa: ");
             String empresa = escaner.leerString();
-            if (!bolsa.existeEmpresa(empresa)) throw new ExcepcionExistenciaEmpresa(empresa,"Esta empresa no existe en la bolsa.");
 
             System.out.println("Introduzca el número de acciones a vender: ");
             int acciones = escaner.leerInt();
@@ -279,10 +278,6 @@ public class BancoDeInversores implements Serializable{
             MensajeVenta operacionVenta = new MensajeVenta(DNI,empresa,acciones);
             agenteInversiones.guardarOperacion(operacionVenta);
             System.out.println("Petición almacenada en la lista de peticiones del bróker.");
-        }
-        catch (ExcepcionExistenciaEmpresa ex){
-            System.out.println(ex.getMessage());
-            System.out.println("Empresa: " + ex.getNombreEmpresa());
         }
         catch (ExcepcionPertenenciaBanco ex){
             System.out.println(ex.getMessage());

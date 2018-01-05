@@ -1,6 +1,7 @@
 package Banco;
 
 import Bolsa.BolsaDeValores;
+import Excepciones.ExcepcionExistenciaEmpresa;
 import Mensajes.*;
 
 import java.text.DecimalFormat;
@@ -8,12 +9,12 @@ import java.util.ArrayList;
 
 public class AgenteInversiones extends Persona {
 
-    private BolsaDeValores bolsaDeValores;
+    private BolsaDeValores bolsa;
     private ArrayList<Mensaje> operacionesPendientes,resultadoDeOperaciones;
 
-    public AgenteInversiones(String nombre, String DNI, BolsaDeValores bolsa){
+    public AgenteInversiones(String nombre, String DNI, BolsaDeValores Bolsa){
         super(nombre, DNI);
-        bolsaDeValores = bolsa;
+        bolsa = Bolsa;
         operacionesPendientes = new ArrayList<Mensaje>();
         resultadoDeOperaciones = new ArrayList<Mensaje>();
     }
@@ -47,14 +48,14 @@ public class AgenteInversiones extends Persona {
             }
         }
     }
-    public void EjecutarOperaciones(BancoDeInversores banco, BolsaDeValores bolsa){
+    public void EjecutarOperaciones(BancoDeInversores banco){
         if (operacionesPendientes.isEmpty()){
             System.out.println("No hay peticiones.");
         }
         else {
             DecimalFormat formateadorValores = new DecimalFormat("0.00");
             for (Mensaje actual : operacionesPendientes) {
-                String respuestaCodificado = bolsaDeValores.intentaOperacion(actual.codificaMensaje());
+                String respuestaCodificado = bolsa.intentaOperacion(actual.codificaMensaje());
                 String[] datos = Mensaje.parser(respuestaCodificado);
                 if (actual instanceof MensajeCompra) {
                     //identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesCompradas
@@ -71,7 +72,13 @@ public class AgenteInversiones extends Persona {
                         System.out.println("Cantidad sobrante: " + formateadorValores.format(Double.parseDouble(datos[6])) + " €\n");
                     }
                     else{
-                        System.out.println("No se ha podido realizar la compra. El precio de acción es superior a la cantidad recibida.\n");
+                        System.out.println("No se ha podido realizar la compra.");
+                        if (Integer.parseInt(datos[4]) == 0 && Double.parseDouble(datos[5]) == 0 && Double.parseDouble(datos[6]) == 0){
+                            System.out.print("Error: La empresa no existe.\n");
+                        }
+                        else{
+                            System.out.print("El precio de acción es superior a la cantidad recibida.\n");
+                        }
                     }
                     resultadoDeOperaciones.add(new MensajeRespuestaCompra(Integer.parseInt(datos[0]), datos[1], datos[2],
                             Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
@@ -90,7 +97,7 @@ public class AgenteInversiones extends Persona {
                         System.out.println("Ganancia total: " + formateadorValores.format(Double.parseDouble(datos[6])) + " €\n");
                     }
                     else{
-                        System.out.println("No se ha podido realizar la venta. Esta empresa ya no existe.\n");
+                        System.out.println("No se ha podido realizar la venta. Esta empresa no existe.\n");
                     }
                     resultadoDeOperaciones.add(new MensajeRespuestaVenta(Integer.parseInt(datos[0]), datos[1], datos[2],
                             Boolean.parseBoolean(datos[3]), Integer.parseInt(datos[4]), Double.parseDouble(datos[5]),
