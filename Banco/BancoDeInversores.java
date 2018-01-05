@@ -31,9 +31,9 @@ public class BancoDeInversores implements Serializable{
         Escaner escaner = new Escaner();
         String DNI = escaner.leerDNI();
         boolean existeGestor = false;
-        for (Map.Entry<String,Cliente> buscarGestores : clientes.entrySet()){
-            if (buscarGestores.getValue() instanceof ClientePremium){
-                if (((ClientePremium) buscarGestores.getValue()).getGestor().getDNI().equals(DNI)){
+        for (Cliente buscarGestores : clientes.values()){
+            if (buscarGestores instanceof ClientePremium){
+                if (((ClientePremium) buscarGestores).getGestor().getDNI().equals(DNI)){
                     existeGestor=true;
                     break;
                 }
@@ -111,17 +111,17 @@ public class BancoDeInversores implements Serializable{
                         System.out.println("Inserte el DNI del Gestor a asociar (Se creará si no existe):");
                         String DNIGestor = escaner.leerDNI();
                         boolean existeDNIEnClientes = false;
-                        for (Map.Entry<String,Cliente> buscarDNI: clientes.entrySet()){
-                            if (buscarDNI.getValue().getDNI().equals(DNIGestor)){
+                        for (Cliente buscarDNI: clientes.values()){
+                            if (buscarDNI.getDNI().equals(DNIGestor)){
                                 existeDNIEnClientes=true;
                                 break;
                             }
                         }
                         if (!existeDNIEnClientes) {
                             String nombreGestor = null;
-                            for (Map.Entry<String, Cliente> cliente : clientes.entrySet()) {
-                                if (cliente.getValue() instanceof ClientePremium) {
-                                    GestorDeInversiones buscarGestor = ((ClientePremium) cliente.getValue()).getGestor();
+                            for (Cliente cliente : clientes.values()) {
+                                if (cliente instanceof ClientePremium) {
+                                    GestorDeInversiones buscarGestor = ((ClientePremium) cliente).getGestor();
                                     if (buscarGestor.getDNI().equalsIgnoreCase(DNIGestor)) {
                                         nombreGestor = buscarGestor.getNombre();
                                         System.out.println("Se asociará el gestor de nombre " + nombreGestor + ".");
@@ -220,9 +220,9 @@ public class BancoDeInversores implements Serializable{
     }
 
     public void ActualizarClientes(String[] empresas, Double[] precios){ //Metodo llamado por el agente que actualiza en cada cliente todas sus acciones
-        for (Map.Entry<String,Cliente> cliente : clientes.entrySet()){
+        for (Cliente cliente : clientes.values()){
             for (int i=0; i < empresas.length; i++){
-                cliente.getValue().actualizarPaquete(empresas[i], precios[i]);
+                cliente.actualizarPaquete(empresas[i], precios[i]);
             }
         }
     }
