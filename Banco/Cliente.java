@@ -85,6 +85,7 @@ public class Cliente extends Persona {
         //devuelve true si se dispone de tienen mas o igual numero de acciones que las disponibles
         return (paqueteDelCliente.containsKey(empresa)) && (this.paqueteDelCliente.get(empresa).getNumeroTitulos()>=numAcciones);
     }
+
     public void imprimirAcciones(){
         if (this.paqueteDelCliente.isEmpty()){
             System.out.println("El cliente no tiene acciones.");

@@ -34,7 +34,9 @@ public class Utilidades {
         }
         return correcto;
     }
+
     public static String primeraMayus(String s){
         return s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
     }
+
 }

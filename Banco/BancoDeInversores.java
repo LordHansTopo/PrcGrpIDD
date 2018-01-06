@@ -41,7 +41,7 @@ public class BancoDeInversores implements Serializable{
             }
         }
         try {
-            if (!this.clientes.containsKey(DNI) && !existeGestor) {
+            if (!this.clientes.containsKey(DNI) && !existeGestor && !comprobarDNIAgente(DNI)) {
                 //si el cliente es nuevo se pide la introduccion de datos
                 System.out.println("Introduzca nombre del cliente");
                 String nombre = escaner.leerString();
@@ -51,12 +51,13 @@ public class BancoDeInversores implements Serializable{
                 Cliente cliente = new Cliente(nombre, DNI, saldo);
                 this.clientes.put(DNI, cliente);
                 System.out.println("Cliente introducido correctamente");
-                } else {
+            } else {
                 throw new ExcepcionPertenenciaBanco(DNI,"Este cliente ya pertenece al banco.");
-                }
-        } catch (ExcepcionPertenenciaBanco ex2) {
-            System.out.println(ex2.getMessage());
-            System.out.println("DNI: " + ex2.getDNI());
+            }
+        } catch (ExcepcionPertenenciaBanco ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("DNI: " + ex.getDNI());
+            System.out.println("DNI: " + ex.getDNI());
         }
     }
 
@@ -68,9 +69,9 @@ public class BancoDeInversores implements Serializable{
             if (this.clientes.containsKey(DNI)) {
                 this.clientes.remove(DNI);
                 System.out.println("Cliente con DNI: " + DNI + " Ha sido correctamente eliminado");
-                } else {
-                    throw new ExcepcionPertenenciaBanco(DNI,"Cliente no pertenece al banco");
-                }
+            } else {
+                throw new ExcepcionPertenenciaBanco(DNI,"Cliente no pertenece al banco");
+            }
         }
         catch (ExcepcionPertenenciaBanco ex2) {
             System.out.println(ex2.getMessage());
@@ -107,48 +108,46 @@ public class BancoDeInversores implements Serializable{
         String DNI = escaner.leerDNI();
         try {
             if (clientes.get(DNI) instanceof ClientePremium) throw new ExcepcionClientePremium(DNI,"Este cliente ya es premium.");
-                try {
-                    if (clientes.containsKey(DNI)) {
-                        System.out.println("Inserte el DNI del Gestor a asociar (Se creará si no existe):");
-                        String DNIGestor = escaner.leerDNI();
-                        boolean existeDNIEnClientes = false;
-                        for (Cliente buscarDNI: clientes.values()){
-                            if (buscarDNI.getDNI().equals(DNIGestor)){
-                                existeDNIEnClientes=true;
+            if (clientes.containsKey(DNI)) {
+                System.out.println("Inserte el DNI del Gestor a asociar (Se creará si no existe):");
+                String DNIGestor = escaner.leerDNI();
+                boolean existeDNIEnClientes = false;
+                for (Cliente buscarDNI: clientes.values()){
+                    if (buscarDNI.getDNI().equals(DNIGestor)){
+                        existeDNIEnClientes=true;
+                        break;
+                    }
+                }
+                existeDNIEnClientes = comprobarDNIAgente(DNIGestor);
+                if (!existeDNIEnClientes) {
+                    String nombreGestor = null;
+                    for (Cliente cliente : clientes.values()) {
+                        if (cliente instanceof ClientePremium) {
+                            GestorDeInversiones buscarGestor = ((ClientePremium) cliente).getGestor();
+                            if (buscarGestor.getDNI().equalsIgnoreCase(DNIGestor)) {
+                                nombreGestor = buscarGestor.getNombre();
+                                System.out.println("Se asociará el gestor de nombre " + nombreGestor + ".");
                                 break;
                             }
                         }
-                        if (!existeDNIEnClientes) {
-                            String nombreGestor = null;
-                            for (Cliente cliente : clientes.values()) {
-                                if (cliente instanceof ClientePremium) {
-                                    GestorDeInversiones buscarGestor = ((ClientePremium) cliente).getGestor();
-                                    if (buscarGestor.getDNI().equalsIgnoreCase(DNIGestor)) {
-                                        nombreGestor = buscarGestor.getNombre();
-                                        System.out.println("Se asociará el gestor de nombre " + nombreGestor + ".");
-                                        break;
-                                    }
-                                }
-                            }
-                            if (nombreGestor == null) {
-                                System.out.println("Inserte el nombre del Gestor a asociar: ");
-                                nombreGestor = escaner.leerString();
-                                System.out.println("Gestor creado con éxito.");
-                            }
-                            ClientePremium clientePremium = new ClientePremium(clientes.get(DNI), new GestorDeInversiones(DNIGestor, nombreGestor, bolsa));
-                            clientes.put(DNI, clientePremium); //se sustituye si existe, no hace falta eliminar antes
-                            System.out.println("El cliente ha sido mejorado.");
-                        }
-                        else throw new ExcepcionPertenenciaBanco(DNI,"Error: Este DNI pertenece a un gestor.");
-                    } else throw new ExcepcionPertenenciaBanco(DNI,"Este cliente no pertenece al banco.");
-                } catch (ExcepcionPertenenciaBanco ex) {
-                    System.out.println(ex.getMessage());
-                    System.out.println("DNI: " + ex.getDNI());
-                }
+                    }
+                    if (nombreGestor == null) {
+                        System.out.println("Inserte el nombre del Gestor a asociar: ");
+                        nombreGestor = escaner.leerString();
+                        System.out.println("Gestor creado con éxito.");
+                    } else throw new ExcepcionPertenenciaBanco(DNI,"Error: Este DNI pertenece a un gestor.");
+                    ClientePremium clientePremium = new ClientePremium(clientes.get(DNI), new GestorDeInversiones(DNIGestor, nombreGestor, bolsa));
+                    clientes.put(DNI, clientePremium); //se sustituye si existe, no hace falta eliminar antes
+                    System.out.println("El cliente ha sido mejorado.");
+
+                } else throw new ExcepcionPertenenciaBanco(DNI,"Este cliente no pertenece al banco.");
             }
-        catch (ExcepcionClientePremium ex){
+        } catch (ExcepcionClientePremium ex){
             System.out.println(ex.getMessage());
             System.out.println("DNI :" + ex.getDNI());
+        } catch (ExcepcionPertenenciaBanco ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("DNI: " + ex.getDNI());
         }
     }
 
@@ -156,8 +155,7 @@ public class BancoDeInversores implements Serializable{
         if (clientes.isEmpty()) System.out.println("El banco está vacío. No se guardará copia de seguridad");
         else {
             try(FileOutputStream file = new FileOutputStream(path);
-                 ObjectOutputStream output = new ObjectOutputStream(file)) {
-                output.writeObject(nombre);
+                ObjectOutputStream output = new ObjectOutputStream(file)) {
                 output.writeObject(clientes);
                 System.out.println("Copia guardada con éxito en " + path);
             } catch (FileNotFoundException fnfex) {
@@ -175,7 +173,6 @@ public class BancoDeInversores implements Serializable{
                 InputStream buffer = new BufferedInputStream(file);
                 ObjectInput input = new ObjectInputStream(buffer)
         ){
-            this.nombre = (String) input.readObject();
             this.clientes = (HashMap<String,Cliente>) input.readObject();
             System.out.println("Copia cargada con éxito en " + path);
         }
@@ -197,9 +194,7 @@ public class BancoDeInversores implements Serializable{
         try{
             if(this.clientes.containsKey(DNI)){
                 this.clientes.get(DNI).compraPaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la compra de las acciones
-            } else {
-                throw new ExcepcionPertenenciaBanco(DNI,"El cliente no existe");
-            }
+            } else throw new ExcepcionPertenenciaBanco(DNI,"El cliente no existe");
         }catch (ExcepcionPertenenciaBanco ex){
             System.out.println(ex.getMessage());
             System.out.println("DNI: " + ex.getDNI());
@@ -211,9 +206,7 @@ public class BancoDeInversores implements Serializable{
         try {
             if (this.clientes.containsKey(DNI)) {
                 this.clientes.get(DNI).vendePaquete(Empresa, numAcciones, precioAccion); //llamada a la funcion el class: Cliente de la venta de las acciones
-            } else {
-                throw new ExcepcionPertenenciaBanco(DNI,"El cliente no existe");
-            }
+            } else throw new ExcepcionPertenenciaBanco(DNI,"El cliente no existe");
         }catch (ExcepcionPertenenciaBanco ex){
             System.out.println(ex.getMessage());
             System.out.println("DNI: " + ex.getDNI());
@@ -241,7 +234,7 @@ public class BancoDeInversores implements Serializable{
 
             System.out.println("Introduzca la cantidad máxima a invertir: ");
             double cantidadMax = escaner.leerDouble();
-            if (clientes.get(DNI).getSaldo()<cantidadMax) throw new ExcepcionSaldoInsuficiente(cantidadMax,"El cliente no tiene dinero suficiente para realizar esta operación.");
+            if (clientes.get(DNI).getSaldo() < cantidadMax) throw new ExcepcionSaldoInsuficiente(cantidadMax,"El cliente no tiene dinero suficiente para realizar esta operación.");
 
             MensajeCompra operacionCompra = new MensajeCompra(DNI, empresa, cantidadMax);
             agenteInversiones.guardarOperacion(operacionCompra);
@@ -300,28 +293,32 @@ public class BancoDeInversores implements Serializable{
         Escaner escaner = new Escaner();
         String DNI = escaner.leerDNI();
         try {
-            if (clientes.containsKey(DNI)) {
-                try {
-                    if (this.clientes.get(DNI) instanceof ClientePremium) {
-                        ((ClientePremium) this.clientes.get(DNI)).getGestor().setBolsa(bolsa);
-                        ((ClientePremium) this.clientes.get(DNI)).getGestor().recomendacionBolsa();
-                        } else throw new ExcepcionClientePremium(DNI,"El cliente no es premium.");
-                    }
-                    catch (ExcepcionClientePremium ex2) {
-                        System.out.println(ex2.getMessage());
-                        System.out.println("DNI: " + ex2.getDNI());
-                    }
-            }
-            else throw new ExcepcionPertenenciaBanco(DNI,"Este cliente no pertenece al banco.");
-            }
-            catch (ExcepcionPertenenciaBanco ex) {
-                System.out.println(ex.getMessage());
-                System.out.println("DNI: " + ex.getDNI());
-            }
+            if (!clientes.containsKey(DNI)) throw new ExcepcionPertenenciaBanco(DNI,"Este cliente no pertenece al banco.");
+            if (this.clientes.get(DNI) instanceof ClientePremium) {
+                ((ClientePremium) this.clientes.get(DNI)).getGestor().setBolsa(bolsa);
+                ((ClientePremium) this.clientes.get(DNI)).getGestor().recomendacionBolsa();
+            } else throw new ExcepcionClientePremium(DNI,"El cliente no es premium.");
+        }
+        catch (ExcepcionClientePremium ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("DNI: " + ex.getDNI());
+        }
+        catch (ExcepcionPertenenciaBanco ex) {
+            System.out.println(ex.getMessage());
+            System.out.println("DNI: " + ex.getDNI());
+        }
     }
 
     public boolean suficienteSaldo(String DNI, double Saldo){
         return clientes.get(DNI).getSaldo()>=Saldo;
+    }
+
+    public boolean comprobarDNIAgente(String DNI){
+        if (this.agenteInversiones.getDNI().equals(DNI)){
+            return true;
+        }else{
+            return false;
+        }
     }
     //endregion
 }

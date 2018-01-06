@@ -13,7 +13,7 @@ public class Simulador {
     public Simulador(){
         this.interfaz = new InterfazDeUsuario();
         this.bolsaDeValores = new BolsaDeValores();
-        this.agenteInversiones = new AgenteInversiones("Marco Polo","123456789A",bolsaDeValores);
+        this.agenteInversiones = new AgenteInversiones("Marco Polo","02749221P",bolsaDeValores);
         this.bancoDeInversores = new BancoDeInversores(this.agenteInversiones,"Banco De Ejemplo");
         bolsaDeValores.CargarCopia("DefectoBolsa.bin"); //Cargar valores por defecto de bolsa
         bancoDeInversores.cargarCopiaSeguridad("DefectoBanco.bin"); //Cargar valores por defecto del banco
