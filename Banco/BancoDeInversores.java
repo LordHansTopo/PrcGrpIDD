@@ -3,6 +3,7 @@ package Banco;
 import Bolsa.BolsaDeValores;
 import Excepciones.*;
 import General.Escaner;
+import General.Utilidades;
 import Mensajes.MensajeActualizacion;
 import Mensajes.MensajeCompra;
 import Mensajes.MensajeVenta;
@@ -236,6 +237,7 @@ public class BancoDeInversores implements Serializable{
 
             System.out.println("Introduzca el nombre de la empresa: ");
             String empresa = escaner.leerString();
+            empresa = Utilidades.primeraMayus(empresa);
 
             System.out.println("Introduzca la cantidad máxima a invertir: ");
             double cantidadMax = escaner.leerDouble();
@@ -264,6 +266,7 @@ public class BancoDeInversores implements Serializable{
 
             System.out.println("Introduzca el nombre de la empresa: ");
             String empresa = escaner.leerString();
+            empresa = Utilidades.primeraMayus(empresa);
 
             System.out.println("Introduzca el número de acciones a vender: ");
             int acciones = escaner.leerInt();
@@ -315,6 +318,10 @@ public class BancoDeInversores implements Serializable{
                 System.out.println(ex.getMessage());
                 System.out.println("DNI: " + ex.getDNI());
             }
+    }
+
+    public boolean suficienteSaldo(String DNI, double Saldo){
+        return clientes.get(DNI).getSaldo()>=Saldo;
     }
     //endregion
 }

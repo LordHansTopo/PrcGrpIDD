@@ -28,10 +28,6 @@ public class Empresa implements Serializable{
         this.valorAnt=0;
         this.incremento=valor;
     }
-    public boolean equals(Object o1){ //Dos empresas son iguales si tienen el mismo nombre
-        if (o1.getClass() != this.getClass()) return false;
-        else return (this.nombre.equals(((Empresa)o1).getNombre()));
-    }
 
     public void imprimirInfo(){
         System.out.println("Nombre: " + nombre);
