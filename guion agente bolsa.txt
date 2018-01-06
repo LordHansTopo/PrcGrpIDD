@@ -1,0 +1,39 @@
+Bolsa y empresas:
+
+La bolsa es un HashMap debido a que se realizan muchas operaciones de obtención de valor (get, containsKey) 
+y el orden no es relevante.
+
+También se realiza bastante iteración sobre el mapa en muchos métodos.
+Por lo tanto, se evita la repetición mediante la clave del mapa (Cuidando la diferencia de mayúsculas).
+
+Se permite elegir libremente la variación en los precios de la bolsa debido a que esto es solo una simulación, 
+aunque en un caso real esto no sería posible.
+
+El aumento y las disminuciones de valor a la hora de comprar y vender acciones siguen la fórmula:
+
+x siendo valor de la acción actual
+y siendo el número de acciones compradas o vendidas
+La suma o resta depende de si se compra o vende respectivamente.
+
+precio = precioInicial +- (x*1/100)*(5/y)
+
+El aumento o disminución no puede ser menor de 1 €.
+
+Agente de Inversiones:
+
+La colección usada para ambas listas de mensajes es un ArrayList, debido a que las operaciones se realizan y guardan en orden.
+resultadoDeOperaciones es una lista con la que no se realiza ninguna operación, pero se ha implementado para guardar los resultados de las operaciones.
+Esta decisión es debida a que se deseaba respetar el UML aportado en la práctica y que se puede usar en un futuro por si se quisiera usar para algo.
+
+Al quererse respetar la estructura de mensajes en los ejemplos aportados, para comprobar el tipo de mensaje en el método intentaOperacion de la bolsa,
+y debido a que recibe un String y no un Mensaje, al parsear el String se utiliza un cast para comprobar el tipo de mensaje:
+
+Si es un mensaje de venta, el cast no lanza ninguna excepción debido a que el valor guardado en datos[3] (numero de acciones a vender) se puede hacer cast en un int.
+Si es un mensaje de compra, el cast lanza la excepción NumberFormatException, ya que en datos[3] (cantidad máxima de saldo a invertir) se guarda un valor double.
+Si es un mensaje de actualización, el cast lanza la excepción IndexOutOfBounds, ya que no existe datos[3] (solo se guarda la fecha)
+
+Este método devuelve el string con el mensaje de respuesta codificado.
+Al llegar de vuelta a EjecutarOperaciones, según el tipo de mensaje inicial (comprobado con instanceof) se realiza la operación pertinente.
+Al realizarse se guarda el resultado.
+Se planteó que la clase Mensaje y sus hijas tuvieran método para crear un mensaje a partir del mismo parseado, pero se decidió que, debido a la insistencia en enunciado y explicaciones
+de que fuera el bróker el que realizara la decodificación de mensajes, se le impone la tarea de la construcción de estos (Lo mismo es aplicable a la creación y codificación de mensajes de respuesta en la bolsa).
