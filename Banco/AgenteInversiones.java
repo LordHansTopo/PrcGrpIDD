@@ -55,12 +55,12 @@ public class AgenteInversiones extends Persona {
         else {
             DecimalFormat formateadorValores = new DecimalFormat("0.00");
             for (Mensaje actual : operacionesPendientes) {
-                String respuestaCodificado = bolsa.intentaOperacion(actual.codificaMensaje());
+                String respuestaCodificado = bolsa.intentaOperacion(actual.codificaMensaje()); //Comunicación con el banco
                 String[] datos = Mensaje.parser(respuestaCodificado);
                 if (actual instanceof MensajeCompra) {
                     //identificador + "|" + cliente + "|" + empresa + "|" + resultadoOp + "|" + accionesCompradas
                     //+ "|" + precioAccion + "|" + cantidadRestante;
-                    if (Boolean.parseBoolean(datos[3])){
+                    if (Boolean.parseBoolean(datos[3]) && banco.suficienteSaldo(datos[1],Integer.parseInt(datos[4])*Double.parseDouble(datos[5]))){
                         banco.ComprarAccion(datos[1], datos[2], Integer.parseInt(datos[4]),
                                 Double.parseDouble(datos[5]));
                         bolsa.aumentarValorEmpresa(datos[2],Integer.parseInt(datos[4]));
@@ -73,11 +73,16 @@ public class AgenteInversiones extends Persona {
                     }
                     else{
                         System.out.println("No se ha podido realizar la compra.");
-                        if (Integer.parseInt(datos[4]) == 0 && Double.parseDouble(datos[5]) == 0 && Double.parseDouble(datos[6]) == 0){
-                            System.out.print("Error: La empresa no existe.\n");
+                        if(!Boolean.parseBoolean(datos[3])){
+                            if (Integer.parseInt(datos[4]) == 0 && Double.parseDouble(datos[5]) == 0 && Double.parseDouble(datos[6]) == 0){
+                                System.out.print("Error: La empresa no existe.\n");
+                            }
+                            else{
+                                System.out.print("El precio de acción es superior a la cantidad recibida.\n");
+                            }
                         }
                         else{
-                            System.out.print("El precio de acción es superior a la cantidad recibida.\n");
+                            System.out.println("El cliente no tiene suficiente saldo.");
                         }
                     }
                     resultadoDeOperaciones.add(new MensajeRespuestaCompra(Integer.parseInt(datos[0]), datos[1], datos[2],

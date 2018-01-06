@@ -24,6 +24,8 @@ public class BolsaDeValores implements Serializable{
         Escaner escaner = new Escaner();
         System.out.println("Introduzca el nombre de la empresa a añadir:");
         String nombre = escaner.leerString();
+        nombre = Utilidades.primeraMayus(nombre);
+
         System.out.println("Inserte el valor mínimo que deberían tener las acciones:");
         double minimo = escaner.leerDouble();
         System.out.println("Inserte el valor máximo que deberían tener las acciones:");
@@ -46,6 +48,7 @@ public class BolsaDeValores implements Serializable{
         Escaner escaner = new Escaner();
         System.out.println("Introduzca el nombre de la empresa a eliminar:");
         String eliminarNombre = escaner.leerString();
+        eliminarNombre = Utilidades.primeraMayus(eliminarNombre);
         try{
             if (bolsa.containsKey(eliminarNombre)){
                 bolsa.remove(eliminarNombre);
@@ -116,9 +119,7 @@ public class BolsaDeValores implements Serializable{
             System.out.println("Error al cargar archivo (Archivo incorrecto). (ClassCastException)");
         }
     }
-    public boolean existeEmpresa(String nombreEmpresa){ //Usado en el banco de inversiones para controlar excepciones
-        return bolsa.containsKey(nombreEmpresa);
-    }
+
     public String intentaOperacion(String mensajeCodificado) {
         String[] datos = Mensaje.parser(mensajeCodificado);
         try{ //Comprobar tipo de mensaje
