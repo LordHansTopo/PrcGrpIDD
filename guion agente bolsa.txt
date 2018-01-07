@@ -1,42 +1,42 @@
 Bolsa y empresas:
 
-La bolsa es un HashMap debido a que se realizan muchas operaciones de obtenciÛn de valor (get, containsKey) 
+La bolsa es un HashMap debido a que se realizan muchas operaciones de obtenci√≥n de valor (get, containsKey) 
 y el orden no es relevante.
 
-TambiÈn se realiza bastante iteraciÛn sobre el mapa en muchos mÈtodos.
-Por lo tanto, se evita la repeticiÛn mediante la clave del mapa (Cuidando la diferencia de may˙sculas).
+Tambi√©n se realiza bastante iteraci√≥n sobre el mapa en muchos m√©todos.
+Por lo tanto, se evita la repetici√≥n mediante la clave del mapa (Cuidando la diferencia de may√∫sculas).
 
-Se permite elegir libremente la variaciÛn en los precios de la bolsa debido a que esto es solo una simulaciÛn, 
-aunque en un caso real esto no serÌa posible.
+Se permite elegir libremente la variaci√≥n en los precios de la bolsa debido a que esto es solo una simulaci√≥n, 
+aunque en un caso real esto no ser√≠a posible.
 
-El aumento y las disminuciones de valor a la hora de comprar y vender acciones siguen la fÛrmula:
+El aumento y las disminuciones de valor a la hora de comprar y vender acciones siguen la f√≥rmula:
 
-x siendo valor de la acciÛn actual
-y siendo el n˙mero de acciones compradas o vendidas
+x siendo valor de la acci√≥n actual
+y siendo el n√∫mero de acciones compradas o vendidas
 La suma o resta depende de si se compra o vende respectivamente.
 
 precio = precioInicial +- (x*1/100)*(5/y)
 
-El aumento o disminuciÛn no puede ser menor de 1 Ä.
+El aumento o disminuci√≥n no puede ser menor de 1 ‚Ç¨.
 
 Agente de Inversiones:
 
-La colecciÛn usada para ambas listas de mensajes es un ArrayList, debido a que las operaciones se realizan y guardan en orden.
-resultadoDeOperaciones es una lista con la que no se realiza ninguna operaciÛn, pero se ha implementado para guardar los resultados de las operaciones.
-Esta decisiÛn es debida a que se deseaba respetar el UML aportado en la pr·ctica y que se puede usar en un futuro por si se quisiera usar para algo.
+La colecci√≥n usada para ambas listas de mensajes es un ArrayList, debido a que las operaciones se realizan y guardan en orden.
+resultadoDeOperaciones es una lista con la que no se realiza ninguna operaci√≥n, pero se ha implementado para guardar los resultados de las operaciones.
+Esta decisi√≥n es debida a que se deseaba respetar el UML aportado en la pr√°ctica y que se puede usar en un futuro por si se quisiera usar para algo.
 
-Al quererse respetar la estructura de mensajes en los ejemplos aportados, para comprobar el tipo de mensaje en el mÈtodo intentaOperacion de la bolsa,
+Al quererse respetar la estructura de mensajes en los ejemplos aportados, para comprobar el tipo de mensaje en el m√©todo intentaOperacion de la bolsa,
 y debido a que recibe un String y no un Mensaje, al parsear el String se utiliza un cast para comprobar el tipo de mensaje:
 
-Si es un mensaje de venta, el cast no lanza ninguna excepciÛn debido a que el valor guardado en datos[3] (numero de acciones a vender) se puede hacer cast en un int.
-Si es un mensaje de compra, el cast lanza la excepciÛn NumberFormatException, ya que en datos[3] (cantidad m·xima de saldo a invertir) se guarda un valor double.
-Si es un mensaje de actualizaciÛn, el cast lanza la excepciÛn IndexOutOfBounds, ya que no existe datos[3] (solo se guarda la fecha)
+Si es un mensaje de venta, el cast no lanza ninguna excepci√≥n debido a que el valor guardado en datos[3] (numero de acciones a vender) se puede hacer cast en un int.
+Si es un mensaje de compra, el cast lanza la excepci√≥n NumberFormatException, ya que en datos[3] (cantidad m√°xima de saldo a invertir) se guarda un valor double.
+Si es un mensaje de actualizaci√≥n, el cast lanza la excepci√≥n IndexOutOfBounds, ya que no existe datos[3] (solo se guarda la fecha)
 
-Este mÈtodo devuelve el string con el mensaje de respuesta codificado.
-Al llegar de vuelta a EjecutarOperaciones, seg˙n el tipo de mensaje inicial (comprobado con instanceof) se realiza la operaciÛn pertinente.
+Este m√©todo devuelve el string con el mensaje de respuesta codificado.
+Al llegar de vuelta a EjecutarOperaciones, seg√∫n el tipo de mensaje inicial (comprobado con instanceof) se realiza la operaci√≥n pertinente.
 Al realizarse se guarda el resultado.
-Se planteÛ que la clase Mensaje y sus hijas tuvieran mÈtodo para crear un mensaje a partir del mismo parseado, pero se decidiÛ que, debido a la insistencia en enunciado y explicaciones
-de que fuera el brÛker el que realizara la decodificaciÛn de mensajes, se le impone la tarea de la construcciÛn de estos (Lo mismo es aplicable a la creaciÛn y codificaciÛn de mensajes de respuesta en la bolsa).
+Se plante√≥ que la clase Mensaje y sus hijas tuvieran m√©todo para crear un mensaje a partir del mismo parseado, pero se decidi√≥ que, debido a la insistencia en enunciado y explicaciones
+de que fuera el br√≥ker el que realizara la decodificaci√≥n de mensajes, se le impone la tarea de la construcci√≥n de estos (Lo mismo es aplicable a la creaci√≥n y codificaci√≥n de mensajes de respuesta en la bolsa).
 
 Banco y cliente:
 
@@ -53,3 +53,18 @@ A traves de instanceof podemos identificar si el objeto guardado es de la clase 
 Paquete de acciones:
 
 Es una simple clase que contine una serie de atributos basicos, y unos extra derivados. Su unico metodo es la actualizacion de 1 accion.
+
+Mensajes:
+
+Los mensajes b√°sicamente se diferencian en tres tipos: de compra, venta y actualizaci√≥n. Para llevar serializados hemos hecho un identificador aleatorio, el cual genera entre 1 y 10000 para llevar todas las operacines ordenadas. 
+
+En este caso la serializaci√≥n de los mensajes est√° hecho en Bolsa, donde llama a mensajes.
+
+En este apartado, √∫nicamente vamos a codificar los mensajes para que lleguen a bolsa y se serialicen.
+
+Empezamos por mensajes de compra. Para ello vamos a necesitar cliente, empresa y la cantidad a comprar. En caso de que sea posible la compra, habiendo invertido igual o m√°s del valor de las acciones, el resto se almacenar√±a de nuevo en el saldo del cliente.
+
+La venta de acciones no dar√° excepci√≥n si existen tantas acciones en posesi√≥n como las requeridas a vender
+
+En cuanto a la actualizaci√≥n, nos ofrecer√° la posibilidad de limitar la cota superior e inferior de los nuevos precios, los cuales se hallar√°n aleatoriamente entre ambos l√≠mites. Estos precios se guardar√°n de nuevo en la copia bolsa, sustituyendo los anteriores y relegandolos a precio anterior. 
+Esta actualizaci√≥n como hemos dicho anteriormente, se realiza en Paquete de acciones.
