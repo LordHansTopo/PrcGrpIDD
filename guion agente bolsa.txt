@@ -37,3 +37,19 @@ Al llegar de vuelta a EjecutarOperaciones, según el tipo de mensaje inicial (com
 Al realizarse se guarda el resultado.
 Se planteó que la clase Mensaje y sus hijas tuvieran método para crear un mensaje a partir del mismo parseado, pero se decidió que, debido a la insistencia en enunciado y explicaciones
 de que fuera el bróker el que realizara la decodificación de mensajes, se le impone la tarea de la construcción de estos (Lo mismo es aplicable a la creación y codificación de mensajes de respuesta en la bolsa).
+
+Banco y cliente:
+
+El banco almacena los clientes en un HashMap de objetos de tipo cliente, utilizamos esta collection al no ser necesario un orden en los clientes y a las muchas busquedas a realizar de dichos clientes. La clave de este HashMap es el propio DNI del cliente, que son debidamente tratados para que tengan el formato correcto y son unicos e irrepetibles. Tambien se tiene cuidado con los DNIs de los gestores y del agente.
+
+Los metodos de carga y guardado de una copia de seguridad en fichero tan solo guardan y cargan dicho HashMap, ya que el agente de bolsa y el nombre del banco tienen una carga predefinida en la creacion del simulador.
+
+El metodo Recomendacion es un metodo por el cual se llama al gestor propio del cliente (debe ser premium) y se le pide una recomendacion, este tan solo mira las valoraciones de la bolsa de valores, y devuelve el nombre de la empresa con mayor variacion.
+
+La clase cliente es la clase utilizada por el HashMap, pero a veces es necesario guardar clientes premium, que ademas de los atributos anteriores tambien tienen a un gestor. Como cliente premium es hijo de cliente es posible guardarlos en la misma collecion. 
+
+A traves de instanceof podemos identificar si el objeto guardado es de la clase cliente premium.
+
+Paquete de acciones:
+
+Es una simple clase que contine una serie de atributos basicos, y unos extra derivados. Su unico metodo es la actualizacion de 1 accion.
