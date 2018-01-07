@@ -40,37 +40,32 @@ public class Cliente extends Persona {
             PaqueteDeAcciones paquete = new PaqueteDeAcciones(empresa, numTitulosTotal, precioIndiv);
             this.paqueteDelCliente.put(empresa, paquete); //Al ser HashMap y tener una Key que ya existia se actualizan los valores del Object
         }
-        saldo-=precioIndiv*numTitulos;
+        this.saldo-=precioIndiv*numTitulos;
     }
 
     public void vendePaquete(String empresa, int numTitulosVendidos, double precioAccionActual){
         //funcion de venta del acciones de una empresa
         try {
-            if (!this.paqueteDelCliente.containsKey(empresa)) {
-                throw new ExcepcionPaquetes("Error, cliente no dispone de acciones de esta empresa");
-            } else {
-                try {
-                    if (numTitulosVendidos > this.paqueteDelCliente.get(empresa).getNumeroTitulos()) {
-                        //excepcion si se intenta vender mas acciones de las que se posee
-                        throw new ExcepcionPaquetes("Error, el cliente no dispone de tantas acciones.");
-                    } else{
-                        int paquetesActuales = (this.paqueteDelCliente.get(empresa).getNumeroTitulos() - numTitulosVendidos);
-                        if (this.paqueteDelCliente.get(empresa).getNumeroTitulos() == numTitulosVendidos) {
-                            //opcion si se venden todas las acciones que se poseen de la empresa
-                            this.paqueteDelCliente.remove(empresa);
-                        } else {
-                            //opcion si se venden menos titulos de los totales
-                            this.paqueteDelCliente.get(empresa).setNumeroTitulos(paquetesActuales);
-                        }
-                        double dineroGanado = (numTitulosVendidos * precioAccionActual); //actualizacion del saldo del cliente tras la venta
-                        this.saldo += dineroGanado;
+            if (!this.paqueteDelCliente.containsKey(empresa)) throw new ExcepcionPaquetes("Error, cliente no dispone de acciones de esta empresa");
+            else {
+                if (numTitulosVendidos > this.paqueteDelCliente.get(empresa).getNumeroTitulos()) {
+                    //excepcion si se intenta vender mas acciones de las que se posee
+                    throw new ExcepcionPaquetes("Error, el cliente no dispone de tantas acciones.");
+                } else {
+                    int paquetesActuales = (this.paqueteDelCliente.get(empresa).getNumeroTitulos() - numTitulosVendidos);
+                    if (this.paqueteDelCliente.get(empresa).getNumeroTitulos() == numTitulosVendidos) {
+                        //opcion si se venden todas las acciones que se poseen de la empresa
+                        this.paqueteDelCliente.remove(empresa);
+                    } else {
+                        //opcion si se venden menos titulos de los totales
+                        this.paqueteDelCliente.get(empresa).setNumeroTitulos(paquetesActuales);
                     }
-                }catch (ExcepcionPaquetes ex2) {
-                    ex2.getMessage();
+                    double dineroGanado = (numTitulosVendidos * precioAccionActual); //actualizacion del saldo del cliente tras la venta
+                    this.saldo += dineroGanado;
                 }
             }
-        } catch (ExcepcionPaquetes ex1) {
-            ex1.getMessage();
+        } catch (ExcepcionPaquetes ex) {
+            ex.getMessage();
         }
     }
 

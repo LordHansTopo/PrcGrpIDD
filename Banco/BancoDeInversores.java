@@ -118,8 +118,7 @@ public class BancoDeInversores implements Serializable{
                         break;
                     }
                 }
-                existeDNIEnClientes = comprobarDNIAgente(DNIGestor);
-                if (!existeDNIEnClientes) {
+                if (!existeDNIEnClientes && !comprobarDNIAgente(DNIGestor)) {
                     String nombreGestor = null;
                     for (Cliente cliente : clientes.values()) {
                         if (cliente instanceof ClientePremium) {
