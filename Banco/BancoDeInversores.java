@@ -57,7 +57,6 @@ public class BancoDeInversores implements Serializable{
         } catch (ExcepcionPertenenciaBanco ex) {
             System.out.println(ex.getMessage());
             System.out.println("DNI: " + ex.getDNI());
-            System.out.println("DNI: " + ex.getDNI());
         }
     }
 
