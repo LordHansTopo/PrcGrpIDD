@@ -83,7 +83,7 @@ public class BolsaDeValores implements Serializable{
         }
     }
     public void GuardarCopia(String path){
-        if (bolsa.isEmpty()) System.out.println("El banco está vacío. No se guardará copia de seguridad");
+        if (bolsa.isEmpty()) System.out.println("La bolsa está vacía. No se guardará copia de seguridad");
         else {
             try (FileOutputStream file = new FileOutputStream(path);
                  ObjectOutputStream output = new ObjectOutputStream(file)) {
